@@ -91,7 +91,7 @@ spark.master	mesos://127.0.0.1:5050
 ![tasks](https://github.com/bacTlink/OS-practice/raw/master/%E7%AC%AC1%E6%AC%A1%E4%BD%9C%E4%B8%9A/Tasks.png)
 magicfisk的slaver
 ![Union](https://github.com/bacTlink/OS-practice/raw/master/%E7%AC%AC1%E6%AC%A1%E4%BD%9C%E4%B8%9A/Union.png)
-agent截图是已经下线，并没有上镜
+agent截图已经下线，并没有上镜T.T
 7.安装的看法
 ---
 mesos的编译资源消耗略大<br>
