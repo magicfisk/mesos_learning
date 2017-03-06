@@ -85,7 +85,10 @@ spark.master	mesos://127.0.0.1:5050
 ```
 
 ```
-
+生成了一个100w句的文本，大小为20M左右<br>
+分别以1个core和4个core运行<br>
+时间分别如下<br>
+资源显示如下<br>
 6.联机测试
 ---
 ![tasks](https://github.com/bacTlink/OS-practice/raw/master/%E7%AC%AC1%E6%AC%A1%E4%BD%9C%E4%B8%9A/Tasks.png)
