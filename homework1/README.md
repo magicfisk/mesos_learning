@@ -85,3 +85,14 @@ spark.master	mesos://127.0.0.1:5050
 ```
 
 ```
+
+6.联机测试
+---
+![tasks](https://github.com/bacTlink/OS-practice/raw/master/%E7%AC%AC1%E6%AC%A1%E4%BD%9C%E4%B8%9A/Tasks.png)
+![Union](https://github.com/bacTlink/OS-practice/raw/master/%E7%AC%AC1%E6%AC%A1%E4%BD%9C%E4%B8%9A/Union.png)
+7.安装的看法
+---
+mesos的编译资源消耗略大<br>
+开始mesos无法找到master的ip，靠重装虚拟机解决<br>
+spark的配置文件中spark.executor.uri 一开始使用官网的地址，导致运行错误<br>
+
