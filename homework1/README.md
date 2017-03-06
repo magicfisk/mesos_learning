@@ -16,3 +16,72 @@ mesos相当于一个底层的资源管理器，负责资源的管理。<br>
 容器与主机共享内核，在内核层面与主机隔离，只携带运行服务时需要的上下文环境<br>
 容器比虚拟机更加灵活，资源占用小，一般是用于特定服务的运行<br>
 虚拟机比容器更加安全，有着更多的功能和扩展性<br>
+4.mesos的安装和配置
+--
+利用git clone 下载mesos的代码，使用checkout切换为1.1.0版本<br>
+按照mesos的文档运行命令
+
+```
+# Change working directory.
+$ cd mesos
+
+# Bootstrap (Only required if building from git repository).
+$ ./bootstrap
+
+# Configure and build.
+$ mkdir build
+$ cd build
+$ ../configure
+$ make
+
+# Run test suite.
+$ make check
+
+# Install (Optional).
+$ make install
+```
+
+运行测试代码
+```
+# Change into build directory.
+$ cd build
+
+# Start mesos master (Ensure work directory exists and has proper permissions).
+$ ./bin/mesos-master.sh --ip=127.0.0.1 --work_dir=/var/lib/mesos
+
+# Start mesos agent (Ensure work directory exists and has proper permissions).
+$ ./bin/mesos-agent.sh --master=127.0.0.1:5050 --work_dir=/var/lib/mesos
+
+# Visit the mesos web page.
+$ http://127.0.0.1:5050
+
+# Run C++ framework (Exits after successfully running some tasks.).
+$ ./src/test-framework --master=127.0.0.1:5050
+
+# Run Java framework (Exits after successfully running some tasks.).
+$ ./src/examples/java/test-framework 127.0.0.1:5050
+
+# Run Python framework (Exits after successfully running some tasks.).
+$ ./src/examples/python/test-framework 127.0.0.1:5050
+```
+其中c的framework在make install执行前是无法完成的
+
+5.spark的配置
+--
+下载编译过的官方包，放在/usr/local 目录下，改名为spark.tar.gz，解压<br>
+进入conf，新建spark-env.conf，并且修改<br>
+```
+export MESOS_NATIVE_JAVA_LIBRARY=/usr/local/lib/libmesos.so
+export SPARK_EXECUTOR_URI=/usr/local/spark.tar.gz
+```
+新建spark-defaults.conf
+```
+spark.executor.uri	/usr/local/spark.tar.gz
+spark.mesos.executor.home /usr/local/spark.tar.gz
+spark.master	mesos://127.0.0.1:5050
+```
+
+运行wordcount测试
+```
+
+```
