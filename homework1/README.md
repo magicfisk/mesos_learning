@@ -64,7 +64,7 @@ $ ./src/examples/java/test-framework 127.0.0.1:5050
 # Run Python framework (Exits after successfully running some tasks.).
 $ ./src/examples/python/test-framework 127.0.0.1:5050
 ```
-其中c的framework在make install执行前是无法完成的
+其中make install 是必要的，提供了spark需要的libmesos.so的链接库
 
 5.spark的配置
 --
