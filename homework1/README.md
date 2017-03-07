@@ -88,8 +88,13 @@ spark.master	mesos://127.0.0.1:5050
 生成了一个100w句的文本，大小为20M左右<br>
 分别以1个core和4个core运行<br>
 时间分别如下<br>
+![time-cpu-1](https://github.com/magicfisk/mesos_learning/blob/master/homework1/time-cpu-1.jpg)
+![time-cpu-2](https://github.com/magicfisk/mesos_learning/blob/master/homework1/time-cpu-2.jpg)
+![time-cpu-4](https://github.com/magicfisk/mesos_learning/blob/master/homework1/time-cpu-4.jpg)
+
 资源显示如下<br>
 ![cpu-1](https://github.com/magicfisk/mesos_learning/blob/master/homework1/cpu-1.jpg)
+![cpu-2](https://github.com/magicfisk/mesos_learning/blob/master/homework1/cpu-2.jpg)
 ![cpu-4](https://github.com/magicfisk/mesos_learning/blob/master/homework1/cpu-4.jpg)
 6.联机测试
 ---
