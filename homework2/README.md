@@ -41,86 +41,86 @@ Slave从spark中获取SparkContext用于任务执行<br>
 master的起始位置是main.cpp<br>
 master的初始化主要过程为(忽略了日志等操作)：<br>
 ```
-(1)Validate flags<br>
-处理命令行参数，设置环境变量<br>
-(2)Libprocess<br>
-初始化底层的通信协议库，mesos基于Libprocess实现master和slave的通信<br>
-(3)Version process<br>
-用于返回http请求的版本号<br>
-(4)Firewall rules<br>
-设置防火墙的相关规则<br>
-(5)Modules<br>
-加载用户运行时需要的库，模型的加载使得mesos有较好可扩展性，无需每次都编译来加载新的库函数<br>
-(6)Anonymous modules<br>
-加载匿名模型<br>
-(7)Hooks<br>
-初始化hook模块<br>
-(8)Allocator<br>
-创建一个分配模块<br>
-(8)Registry storage<br>
-存储空间的初始化和确认<br>
-(9)Master contendor<br>
-竞争leader<br>
-(10)Master detector<br>
-检测当前master的模块<br>
-(11)Authorizer<br>
-认证模块<br>
-(12)Slave removal rate limiter<br>
-用于流量限制的初始化，防止master被过量的slave请求淹没？<br>
-(13)Master process<br>
-  Master* master =<br>
-    new Master(<br>
-      allocator.get(),<br>
-      registrar,<br>
-      &files,<br>
-      contender,<br>
-      detector,<br>
-      authorizer_,<br>
-      slaveRemovalLimiter,<br>
-      flags);<br>
-利用上述参数构建一个新的master实例。<br>
+(1)Validate flags
+处理命令行参数，设置环境变量
+(2)Libprocess
+初始化底层的通信协议库，mesos基于Libprocess实现master和slave的通信
+(3)Version process
+用于返回http请求的版本号
+(4)Firewall rules
+设置防火墙的相关规则
+(5)Modules
+加载用户运行时需要的库，模型的加载使得mesos有较好可扩展性，无需每次都编译来加载新的库函数
+(6)Anonymous modules
+加载匿名模型
+(7)Hooks
+初始化hook模块
+(8)Allocator
+创建一个分配模块
+(8)Registry storage
+存储空间的初始化和确认
+(9)Master contendor
+竞争leader
+(10)Master detector
+检测当前master的模块
+(11)Authorizer
+认证模块
+(12)Slave removal rate limiter
+用于流量限制的初始化，防止master被过量的slave请求淹没？
+(13)Master process
+  Master* master =
+    new Master(
+      allocator.get(),
+      registrar,
+      &files,
+      contender,
+      detector,
+      authorizer_,
+      slaveRemovalLimiter,
+      flags);
+利用上述参数构建一个新的master实例。
 ```
 在master.cpp中，master类中自带一个Initialize类函数，但没有找到调用的地方<br>
 ###slave的初始化<br>
 部分同master，不再展开<br>
 ```
-(1)Windows socket stack.<br>
-若在windows环境中，初始化windows的scoket栈<br>
-(2)Validate flags<br>
-(3)Libprocess<br>
-(4)Version process<br>
-(5)Firewall rules<br>
-(6)Modules<br>
-(7)Anonymous modules<br>
-(8)contender/detector<br>
-(9)Hooks.<br>
-(10)Systemd support<br>
-如果是linux系统，初始化systemmd，启动各种服务<br>
-(11)Fetcher and Containerizer.<br>
-初始化fetcher用于资源下载，初始化containerizer作为slave的容器<br>
-(12)Master detector.<br>
-(13)Authorizer.<br>
-(14)Garbage collector<br>
-初始化垃圾回收器<br>
-(17)Status update manager<br>
-状态更新管理器<br>
-(18)Resource estimator<br>
-资源评估器<br>
-(19)QoS controller<br>
-初始化Qos控制器，用于服务质量控制(?)<br>
-(20)slave process.<br>
-  Slave* slave = new Slave(<br>
-      id,<br>
-      flags,<br>
-      detector,<br>
-      containerizer.get(),<br>
-      &files,<br>
-      &gc,<br>
-      &statusUpdateManager,<br>
-      resourceEstimator.get(),<br>
-      qosController.get(),<br>
-      authorizer_);<br>
-利用上述参数构建一个新的slave实例。<br>
+(1)Windows socket stack.
+若在windows环境中，初始化windows的scoket栈
+(2)Validate flags
+(3)Libprocess
+(4)Version process
+(5)Firewall rules
+(6)Modules
+(7)Anonymous modules
+(8)contender/detector
+(9)Hooks.
+(10)Systemd support
+如果是linux系统，初始化systemmd，启动各种服务
+(11)Fetcher and Containerizer.
+初始化fetcher用于资源下载，初始化containerizer作为slave的容器
+(12)Master detector.
+(13)Authorizer.
+(14)Garbage collector
+初始化垃圾回收器
+(17)Status update manager
+状态更新管理器
+(18)Resource estimator
+资源评估器
+(19)QoS controller
+初始化Qos控制器，用于服务质量控制(?)
+(20)slave process.
+  Slave* slave = new Slave(
+      id,
+      flags,
+      detector,
+      containerizer.get(),
+      &files,
+      &gc,
+      &statusUpdateManager,
+      resourceEstimator.get(),
+      qosController.get(),
+      authorizer_);
+利用上述参数构建一个新的slave实例。
 ```
 ## Mesos的资源调度算法
 ### 1.算法简述
