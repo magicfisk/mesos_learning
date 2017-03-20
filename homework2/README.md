@@ -81,7 +81,7 @@ master的初始化主要过程为(忽略了日志等操作)：<br>
    利用上述参数构建一个新的master实例。
 ```
 在master.cpp中，master类中自带一个Initialize类函数，但没有找到调用的地方<br>
-###slave的初始化<br>
+### slave的初始化<br>
 部分同master，不再展开<br>
 ```
 (1)Windows socket stack.
