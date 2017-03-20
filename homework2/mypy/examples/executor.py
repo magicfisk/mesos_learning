@@ -1,4 +1,5 @@
 #!/usr/bin/env python2.7
+#coding=utf-8
 from __future__ import print_function
 
 import sys
@@ -13,17 +14,20 @@ from addict import Dict
 class MinimalExecutor(Executor):
     def launchTask(self, driver, task):
         def run_task(task):
+            #更新状态，表明任务开始
             update = Dict()
             update.task_id.value = task.task_id.value
             update.state = 'TASK_RUNNING'
             update.timestamp = time.time()
             driver.sendStatusUpdate(update)
+            #解析数据
             data=decode_data(task.data)
             data=data.split('\n')
-            
+            #初始化统计量
             left=0
             right=0
             ans=''
+            #计算
             for x in data:
                 if x=='':
                     break
@@ -37,10 +41,11 @@ class MinimalExecutor(Executor):
                     right=right+1
                 else:
                     left=left+1
-            
+            #返回计算结果
             ans=str(left)+' '+str(right)
             driver.sendFrameworkMessage(encode_data(ans))
-
+            
+            #更新状态，表明计算结束
             update = Dict()
             update.task_id.value = task.task_id.value
             update.state = 'TASK_FINISHED'
