@@ -42,31 +42,31 @@ master的起始位置是main.cpp<br>
 master的初始化主要过程为(忽略了日志等操作)：<br>
 ```
 (1)Validate flags
-处理命令行参数，设置环境变量
+   处理命令行参数，设置环境变量
 (2)Libprocess
-初始化底层的通信协议库，mesos基于Libprocess实现master和slave的通信
+   初始化底层的通信协议库，mesos基于Libprocess实现master和slave的通信
 (3)Version process
-用于返回http请求的版本号
+   用于返回http请求的版本号
 (4)Firewall rules
-设置防火墙的相关规则
+   设置防火墙的相关规则
 (5)Modules
-加载用户运行时需要的库，模型的加载使得mesos有较好可扩展性，无需每次都编译来加载新的库函数
+   加载用户运行时需要的库，模型的加载使得mesos有较好可扩展性，无需每次都编译来加载新的库函数
 (6)Anonymous modules
-加载匿名模型
+   加载匿名模型
 (7)Hooks
-初始化hook模块
+   初始化hook模块
 (8)Allocator
-创建一个分配模块
+   创建一个分配模块
 (8)Registry storage
-存储空间的初始化和确认
+   存储空间的初始化和确认
 (9)Master contendor
-竞争leader
+   竞争leader
 (10)Master detector
-检测当前master的模块
+    检测当前master的模块
 (11)Authorizer
-认证模块
+   认证模块
 (12)Slave removal rate limiter
-用于流量限制的初始化，防止master被过量的slave请求淹没？
+   用于流量限制的初始化，防止master被过量的slave请求淹没？
 (13)Master process
   Master* master =
     new Master(
@@ -78,14 +78,14 @@ master的初始化主要过程为(忽略了日志等操作)：<br>
       authorizer_,
       slaveRemovalLimiter,
       flags);
-利用上述参数构建一个新的master实例。
+   利用上述参数构建一个新的master实例。
 ```
 在master.cpp中，master类中自带一个Initialize类函数，但没有找到调用的地方<br>
 ###slave的初始化<br>
 部分同master，不再展开<br>
 ```
 (1)Windows socket stack.
-若在windows环境中，初始化windows的scoket栈
+   若在windows环境中，初始化windows的scoket栈
 (2)Validate flags
 (3)Libprocess
 (4)Version process
@@ -95,19 +95,19 @@ master的初始化主要过程为(忽略了日志等操作)：<br>
 (8)contender/detector
 (9)Hooks.
 (10)Systemd support
-如果是linux系统，初始化systemmd，启动各种服务
+   如果是linux系统，初始化systemmd，启动各种服务
 (11)Fetcher and Containerizer.
-初始化fetcher用于资源下载，初始化containerizer作为slave的容器
+   初始化fetcher用于资源下载，初始化containerizer作为slave的容器
 (12)Master detector.
 (13)Authorizer.
 (14)Garbage collector
-初始化垃圾回收器
+   初始化垃圾回收器
 (17)Status update manager
-状态更新管理器
+   状态更新管理器
 (18)Resource estimator
-资源评估器
+   资源评估器
 (19)QoS controller
-初始化Qos控制器，用于服务质量控制(?)
+   初始化Qos控制器，用于服务质量控制(?)
 (20)slave process.
   Slave* slave = new Slave(
       id,
@@ -120,7 +120,7 @@ master的初始化主要过程为(忽略了日志等操作)：<br>
       resourceEstimator.get(),
       qosController.get(),
       authorizer_);
-利用上述参数构建一个新的slave实例。
+   利用上述参数构建一个新的slave实例。
 ```
 ## Mesos的资源调度算法
 ### 1.算法简述
