@@ -3,36 +3,33 @@
 ### 1.mesos的组成结构
 ![mesos](https://github.com/magicfisk/mesos_learning/blob/master/homework2/mesos.png)<br>
 mesos的主要部件有<br>
-master：管理节点，负责接受slave和framework的注册，管理资源的初始分配<br>
-slave(agent)：接受master对任务的调度，将对应executor运行,定期向master汇报资源情况<br>
-Framework：包括两个实体，scheduler和executor<br>
-scheduler：注册到master，接受master提供的Resource offer信息，决定在提供的slave上运行什么executor，或者是放弃不用<br>
-executor：由slave实际负责加载运行，但由scheduler管理<br>
+* master：管理节点，负责接受slave和framework的注册，管理资源的初始分配<br>
+* slave(agent)：接受master对任务的调度，将对应executor运行,定期向master汇报资源情况<br>
+* Framework：包括两个实体，scheduler和executor<br>
+* scheduler：注册到master，接受master提供的Resource offer信息，决定在提供的slave上运行什么executor，或者是放弃不用<br>
+* executor：由slave实际负责加载运行，但由scheduler管理<br>
 辅助的部件<br>
-zookeeper：选举master的部件，在master掉线后，提供master的候选人，恢复状态<br>
+* zookeeper：选举master的部件，在master掉线后，提供master的候选人，恢复状态<br>
 ### 部件的代码位置
-master：mesos-1.1.0/src/master<br>
-slave：mesos-1.1.0/src/slave<br>
-scheduler：mesos-1.1.0/src/scheduler<br>
-executor：mesos-1.1.0/src/executor<br>
-zookeeper：mesos-1.1.0/src/zookeeper<br>
+* master：mesos-1.1.0/src/master<br>
+* slave：mesos-1.1.0/src/slave<br>
+* scheduler：mesos-1.1.0/src/scheduler<br>
+* executor：mesos-1.1.0/src/executor<br>
+* zookeeper：mesos-1.1.0/src/zookeeper<br>
 ### mesos工作流程
 (1)注册<br>
-framework启动后，向master注册<br>
-slave启动后也向master注册<br>
+* framework启动后，向master注册<br>
+* slave启动后也向master注册<br>
 (2)资源分配和运行<br>
 ![offer](https://github.com/magicfisk/mesos_learning/blob/master/homework2/offer.png)<br>
-slave定期向master报告自己的资源情况<br>
-master通过Resource Offer机制，告诉framework可以调用的资源<br>
-framework根据自己的task情况，决定是否使用master提供的资源，并回复master关于task和资源的匹配情况<br>
-master获得framework的分配结果，向slave发送对应的task<br>
-slave得到task后，加载executor，运行相应的程序<br>
+* slave定期向master报告自己的资源情况<br>
+* master通过Resource Offer机制，告诉framework可以调用的资源<br>
+* framework根据自己的task情况，决定是否使用master提供的资源，并回复master关于task和资源的匹配情况<br>
+* master获得framework的分配结果，向slave发送对应的task<br>
+* slave得到task后，加载executor，运行相应的程序<br>
 ## Spark On Mesos
 ![Spark](https://github.com/magicfisk/mesos_learning/blob/master/homework2/spark.png)<br>
-mesos取代了spark原来结构中的Cluster Manager<br>
-用户向spark提交任务<br>
-mesos决定任务在那个slave上执行<br>
-Slave从spark中获取SparkContext用于任务执行<br>
+  mesos取代了spark原来结构中的Cluster Manager,用户向spark提交任务,mesos决定任务在那个slave上执行,Slave从spark中获取SparkContext用于任务执行<br>
 ### 与操作系统的比较<br>
 @@待补<br>
 ## master和slave的初始化过程
