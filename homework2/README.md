@@ -31,7 +31,13 @@
 ![Spark](https://github.com/magicfisk/mesos_learning/blob/master/homework2/spark.png)<br>
   mesos取代了spark原来结构中的Cluster Manager,用户向spark提交任务,mesos决定任务在那个slave上执行,Slave从spark中获取SparkContext用于任务执行<br>
 ### 与操作系统的比较<br>
-@@待补<br>
+#### 相同
+* mesos架构和操作系统同样对资源进行了封装，用户不用在意底层硬件的结构，只要关注硬件的数目
+* 涉及到底层的操作，最终还是要靠mesos或者内核来实现（例如操作系统中的IO操作，mesos中的任务调度），保证了安全性
+#### 不同
+* 操作系统中因为资源是集中的，用户只需要关心自己获得资源总量即可。而mesos的分布式系统，资源的分散，使得用户需要对资源评估，是否能满足单个任务。mesos中用户负担的任务更加重。
+* mesos系统中，用户需要考虑个别agent挂掉的情况，而操作系统中，无需担心
+* 分布式系统使得系统的算法也会发生改变。
 ## master和slave的初始化过程
 ### master的初始化
 代码位置mesos-1.1.0/src/master/master.cpp 、main.cpp<br>
@@ -142,6 +148,159 @@ hierarchical中实现了filter功能，允许framework事先拒绝一些过小�
 ### 看法
 DRF解决了多维度的资源分配的公平性，当时却不一定解决了整体系统的利用率的，对于一些资源需求比例畸形的任务，DRF不一定有很高的效率<br>
 ## 写一个完成简单工作的框架(语言自选，需要同时实现scheduler和executor)并在Mesos上运行
-背景：在粒子系统中，我们需要对每一个粒子进行轨迹计算，来获得整体的逼真的细节。粒子轨迹的计算有非常好的可并行性，适合分布式系统。<br>
-化简：把一个粒子的轨迹看作一个抛物线，给出了每个粒子的抛物线方程，统计粒子最后落在负半轴还是正半轴。（就是右计算零点233）<br>
-代码在mypy\examples中，make_data为数据制造器，在pymesos的scheduler上重载了一些api实现了新的功能，具体见代码<br>
+### 背景
+在粒子系统中，我们需要对每一个粒子进行轨迹计算，来获得整体的逼真的细节。粒子轨迹的计算有非常好的可并行性，适合分布式系统。<br>
+### 问题化简
+把一个粒子的轨迹看作一个抛物线，给出了每个粒子的抛物线方程，统计粒子最后落在负半轴还是正半轴。（就是右计算零点233）<br>
+### 细节
+代码在mypy\examples中，make_data为数据制造器，基于pymesos实现<br>
+测试生成了10000组数据，分成10个任务(第11个任务为空),分发到3个机器上运行<br>
+### 运行
+![running](https://github.com/magicfisk/mesos_learning/blob/master/homework2/running.png)<br>
+命令行中成功返回了最终的统计结果<br>
+![runing2](https://github.com/magicfisk/mesos_learning/blob/master/homework2/runing2.png)<br>
+在mesos资源查看网页中，能看到任务分到不同机器上运行<br>
+### 代码
+只对核心功能代码进行描述，具体见mypy/examples下相关代码
+#### scheduler
+
+```
+class MinimalScheduler(Scheduler):
+
+    def __init__(self, executor):
+        self.executor = executor
+        self.Task_launched=0
+        self.Task_finished=0
+        self.file_end=False
+        self.right=0
+        self.left=0
+        self.f1=open('data.txt','r')
+```
+* 初始化变量，Task_launched已经分发的任务，Task_finished为已经结束的任务，file_end表示文件读完，f1为文件，right和left为统计变量
+
+```
+    def resourceOffers(self, driver, offers):
+    
+        def get_data(self):
+            tmp1='';
+            for x in range(1,TASK_MaxNum):
+                tmp=self.f1.readline();
+                if tmp=='':
+                    self.file_end=True
+                    break
+                tmp1=tmp1+tmp
+            return tmp1    
+```
+* 读入数据的函数，作为resourceOffers的一个子函数
+
+```
+        for offer in offers:
+            cpus = self.getResource(offer.resources, 'cpus')
+            mem = self.getResource(offer.resources, 'mem')
+            if cpus < TASK_CPU or mem < TASK_MEM or self.file_end:
+                continue
+            self.Task_launched=self.Task_launched+1
+```
+* 准备分发任务前的准备，将计数器增加
+```
+            task = Dict()
+            task_id = str(uuid.uuid4())
+            task.task_id.value = task_id
+            task.agent_id.value = offer.agent_id.value
+            task.name = 'task {}'.format(task_id)
+            task.executor = self.executor
+            
+            task.data = encode_data(get_data(self))  #读入数据，并且存入task
+			
+            task.resources = [
+                dict(name='cpus', type='SCALAR', scalar={'value': TASK_CPU}),
+                dict(name='mem', type='SCALAR', scalar={'value': TASK_MEM}),
+            ]
+```
+* 对task的封装
+
+```
+            driver.launchTasks(offer.id, [task], filters) 
+```
+* 调度任务
+
+```
+    def statusUpdate(self, driver, update):       
+        print ('%d Task has finished,%d task has launched' %(self.Task_finished,self.Task_launched))
+        #如果所有任务结束，并且文件读完则停止framework
+        if self.file_end:
+            if self.Task_finished==self.Task_launched:
+                print ('\nthere is %d balls in the left,and %d balls in the right\n' % (self.left,self.right))
+                driver.stop()
+```
+* 状态更新回调函数
+
+```
+    def frameworkMessage(self, driver, executorId, slaveId, message):
+        ans=decode_data(message)
+        print ('get an ans %s' %ans)
+        ans=ans.split(' ')
+        self.left=self.left+int(ans[0])
+        self.right=self.right+int(ans[1])
+        self.Task_finished=self.Task_finished+1
+```
+* 接受agent计算结果并且统计的函数
+
+```
+def main(master):
+	...
+	
+```
+* 完成对环境变量的封装
+#### executor
+```
+class MinimalExecutor(Executor):
+    def launchTask(self, driver, task):
+        def run_task(task):
+            
+            update = Dict()
+            update.task_id.value = task.task_id.value
+            update.state = 'TASK_RUNNING'
+            update.timestamp = time.time()
+            driver.sendStatusUpdate(update)
+```
+* 更新状态，表明任务开始
+```
+            data=decode_data(task.data)
+            data=data.split('\n')
+			left=0
+            right=0
+            ans=''
+```
+* 解析数据、初始化变量
+        
+```
+            for x in data:
+                if x=='':
+                    break
+                tmp=x.split(' ')
+                a=float(tmp[0])
+                b=float(tmp[1])
+                c=float(tmp[2])
+                deta=math.sqrt(b*b-4*a*c)
+                pt=(-deta-b)*0.5/a
+                if pt>0:
+                    right=right+1
+                else:
+                    left=left+1
+```
+* 计算
+```
+            ans=str(left)+' '+str(right)
+            driver.sendFrameworkMessage(encode_data(ans))
+```
+* 返回计算结果
+
+```
+            update = Dict()
+            update.task_id.value = task.task_id.value
+            update.state = 'TASK_FINISHED'
+            update.timestamp = time.time()
+            driver.sendStatusUpdate(update)
+```
+* 更新状态，表明计算结束
