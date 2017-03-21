@@ -2,13 +2,13 @@
 ## 一、mesos
 ### 1.mesos的组成结构
 ![mesos](https://github.com/magicfisk/mesos_learning/blob/master/homework2/mesos.png)<br>
-mesos的主要部件有<br>
+#### mesos的主要部件有<br>
 * master：管理节点，负责接受slave和framework的注册，管理资源的初始分配<br>
 * slave(agent)：接受master对任务的调度，将对应executor运行,定期向master汇报资源情况<br>
 * Framework：包括两个实体，scheduler和executor<br>
 * scheduler：注册到master，接受master提供的Resource offer信息，决定在提供的slave上运行什么executor，或者是放弃不用<br>
 * executor：由slave实际负责加载运行，但由scheduler管理<br>
-辅助的部件<br>
+#### 辅助的部件<br>
 * zookeeper：选举master的部件，在master掉线后，提供master的候选人，恢复状态<br>
 ### 部件的代码位置
 * master：mesos-1.1.0/src/master<br>
