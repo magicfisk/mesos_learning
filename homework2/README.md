@@ -125,6 +125,7 @@ master的初始化主要过程为(忽略了日志等操作)：<br>
       authorizer_);
    利用上述参数构建一个新的slave实例。
 ```
+在slave.cpp中，slave类中自带一个Initialize类函数，但同样没有找到调用的地方
 ## Mesos的资源调度算法
 ### 1.算法简述
 mesos采用的资源调度算法为DRF<br>
