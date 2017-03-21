@@ -29,7 +29,7 @@
 * slave得到task后，加载executor，运行相应的程序<br>
 ## Spark On Mesos
 ![Spark](https://github.com/magicfisk/mesos_learning/blob/master/homework2/spark.png)<br>
-  mesos取代了spark原来结构中的Cluster Manager,用户向spark提交任务,mesos决定任务在那个slave上执行,Slave从spark中获取SparkContext用于任务执行<br>
+  mesos取代了spark原来结构中的Cluster Manager，用户向spark提交任务，mesos决定任务在那个slave上执行，Slave从spark中获取SparkContext用于任务执行<br>
 ### 与操作系统的比较<br>
 #### 相同
 * mesos架构和操作系统同样对资源进行了封装，用户不用在意底层硬件的结构，只要关注硬件的数目
