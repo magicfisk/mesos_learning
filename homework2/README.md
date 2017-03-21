@@ -155,7 +155,7 @@ DRF解决了多维度的资源分配的公平性，当时却不一定解决了�
 把一个粒子的轨迹看作一个抛物线，给出了每个粒子的抛物线方程，统计粒子最后落在负半轴还是正半轴。（就是右计算零点233）<br>
 ### 细节
 代码在mypy\examples中，make_data为数据制造器，基于pymesos实现<br>
-测试生成了10000组数据，分成10个任务(第11个任务为空),分发到3个机器上运行<br>
+测试生成了10000组数据，分成11个任务,分发到3个机器上运行<br>
 ### 运行
 ![running](https://github.com/magicfisk/mesos_learning/blob/master/homework2/running.png)<br>
 命令行中成功返回了最终的统计结果<br>
