@@ -159,7 +159,7 @@ DRF解决了多维度的资源分配的公平性，当时却不一定解决了�
 ### 运行
 ![running](https://github.com/magicfisk/mesos_learning/blob/master/homework2/running.png)<br>
 命令行中成功返回了最终的统计结果<br>
-![runing2](https://github.com/magicfisk/mesos_learning/blob/master/homework2/runing2.png)<br>
+![runing2](https://github.com/magicfisk/mesos_learning/blob/master/homework2/running2.png)<br>
 在mesos资源查看网页中，能看到任务分到不同机器上运行<br>
 ### 代码
 只对核心功能代码进行描述，具体见mypy/examples下相关代码
