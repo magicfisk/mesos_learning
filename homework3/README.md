@@ -14,24 +14,24 @@ docker run  [OPTIONS] IMAGE[:TAG] [COMMAND] [ARG...]
 
 * 常用options
 ```
--d						  后台 (前台默认)
--a, --attach value		  连接容器的stdin、stdout、stderr
--t				          使用终端。经常和 -i一起使用。
--i						  打开STDIN和容器交互。经常和 -t一起使用。
+-d			  后台 (前台默认)
+-a, --attach value	  连接容器的stdin、stdout、stderr
+-t		          使用终端。经常和 -i一起使用。
+-i			  打开STDIN和容器交互。经常和 -t一起使用。
 -m, --memory string    	  内存限制(单位:b, k, m or g)
 -c, --cpu-shares int   	  CPU优先级 (相对权重)
--u, --user string		  设置用户名
--w,--workdir string		  设置工作目录 默认为根目录
--e,--env value			  设置环境变量
--p						  将主机端口和容器端口设置转发 -p ip:80:80
+-u, --user string	  设置用户名
+-w,--workdir string	  设置工作目录 默认为根目录
+-e,--env value		  设置环境变量
+-p			  将主机端口和容器端口设置转发 -p ip:80:80
 -h,--hostname string      容器的主机名
--v, --volume value		  挂载本地目录，目录前面是本机目录，后面是镜像目录
-							例子docker run --rm-i -t -v /home/hyzhou/docker:/data:rw ubuntu:14.04 /bin/bash
---volumes-from			  从容器挂载共享目录
---name string			  容器名字
+-v, --volume value	  挂载本地目录，目录前面是本机目录，后面是镜像目录
+				例子docker run --rm-i -t -v /home/hyzhou/docker:/data:rw ubuntu:14.04 /bin/bash
+--volumes-from		  从容器挂载共享目录
+--name string		  容器名字
 --dns	              	  设置容器的DNS服务器
---net	        	  	  设置容器的网络连接方式bridge,none,Container:<name|id>,host
---ip/--ip6				  容器的ip地址
+--net	          	  设置容器的网络连接方式bridge,none,Container:<name|id>,host
+--ip/--ip6		  容器的ip地址
 ```
 以下为全体option
 ```
