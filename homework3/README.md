@@ -1,39 +1,39 @@
-# µÚÈı´Î×÷Òµ
-## 1.°²×°docker
+# ç¬¬ä¸‰æ¬¡ä½œä¸š
+## 1.å®‰è£…docker
 ![pic1](https://github.com/magicfisk/mesos_learning/raw/master/homework3/install.jpg)
-## docker»ù±¾ÃüÁî
+## dockeråŸºæœ¬å‘½ä»¤
 ### docker run
-* Óï·¨
+* è¯­æ³•
 ```
 docker run  [OPTIONS] IMAGE[:TAG] [COMMAND] [ARG...]
 ```
-* ÔËĞĞÒ»¸öĞÂµÄÈİÆ÷£¬ÈİÆ÷ÓµÓĞ×Ô¼ºµÄÎÄ¼şÏµÍ³¡¢ÍøÂç
-* IMAGE[:TAG]Öµ¾µÏñÃû×Ö
-* commandÎª¾µÏñÔËĞĞºóÖ´ĞĞµÄÖ¸Áî
-* argÎªcommand²ÎÊı
+* è¿è¡Œä¸€ä¸ªæ–°çš„å®¹å™¨ï¼Œå®¹å™¨æ‹¥æœ‰è‡ªå·±çš„æ–‡ä»¶ç³»ç»Ÿã€ç½‘ç»œ
+* IMAGE[:TAG]å€¼é•œåƒåå­—
+* commandä¸ºé•œåƒè¿è¡Œåæ‰§è¡Œçš„æŒ‡ä»¤
+* argä¸ºcommandå‚æ•°
 
-* ³£ÓÃoptions
+* å¸¸ç”¨options
 ```
--d			  ºóÌ¨ (Ç°Ì¨Ä¬ÈÏ)
--a, --attach value	  Á¬½ÓÈİÆ÷µÄstdin¡¢stdout¡¢stderr
--t			  Ê¹ÓÃÖÕ¶Ë¡£¾­³£ºÍ -iÒ»ÆğÊ¹ÓÃ¡£
--i			  ´ò¿ªSTDINºÍÈİÆ÷½»»¥¡£¾­³£ºÍ -tÒ»ÆğÊ¹ÓÃ¡£
--m, --memory string    	  ÄÚ´æÏŞÖÆ(µ¥Î»:b, k, m or g)
--c, --cpu-shares int   	  CPUÓÅÏÈ¼¶ (Ïà¶ÔÈ¨ÖØ)
--u, --user string	  ÉèÖÃÓÃ»§Ãû
--w,--workdir string	  ÉèÖÃ¹¤×÷Ä¿Â¼ Ä¬ÈÏÎª¸ùÄ¿Â¼
--e,--env value		  ÉèÖÃ»·¾³±äÁ¿
--p			  ½«Ö÷»ú¶Ë¿ÚºÍÈİÆ÷¶Ë¿ÚÉèÖÃ×ª·¢ -p ip:80:80
--h,--hostname string      ÈİÆ÷µÄÖ÷»úÃû
--v, --volume value	  ¹ÒÔØ±¾µØÄ¿Â¼£¬Ä¿Â¼Ç°ÃæÊÇ±¾»úÄ¿Â¼£¬ºóÃæÊÇ¾µÏñÄ¿Â¼
-				Àı×Ódocker run --rm-i -t -v /home/hyzhou/docker:/data:rw ubuntu:14.04 /bin/bash
---volumes-from		  ´ÓÈİÆ÷¹ÒÔØ¹²ÏíÄ¿Â¼
---name string		  ÈİÆ÷Ãû×Ö
---dns	              	  ÉèÖÃÈİÆ÷µÄDNS·şÎñÆ÷
---net	        	  ÉèÖÃÈİÆ÷µÄÍøÂçÁ¬½Ó·½Ê½bridge,none,Container:<name|id>,host
---ip/--ip6		  ÈİÆ÷µÄipµØÖ·
+-d			  åå° (å‰å°é»˜è®¤)
+-a, --attach value	  è¿æ¥å®¹å™¨çš„stdinã€stdoutã€stderr
+-t			  ä½¿ç”¨ç»ˆç«¯ã€‚ç»å¸¸å’Œ -iä¸€èµ·ä½¿ç”¨ã€‚
+-i			  æ‰“å¼€STDINå’Œå®¹å™¨äº¤äº’ã€‚ç»å¸¸å’Œ -tä¸€èµ·ä½¿ç”¨ã€‚
+-m, --memory string    	  å†…å­˜é™åˆ¶(å•ä½:b, k, m or g)
+-c, --cpu-shares int   	  CPUä¼˜å…ˆçº§ (ç›¸å¯¹æƒé‡)
+-u, --user string	  è®¾ç½®ç”¨æˆ·å
+-w,--workdir string	  è®¾ç½®å·¥ä½œç›®å½• é»˜è®¤ä¸ºæ ¹ç›®å½•
+-e,--env value		  è®¾ç½®ç¯å¢ƒå˜é‡
+-p			  å°†ä¸»æœºç«¯å£å’Œå®¹å™¨ç«¯å£è®¾ç½®è½¬å‘ -p ip:80:80
+-h,--hostname string      å®¹å™¨çš„ä¸»æœºå
+-v, --volume value	  æŒ‚è½½æœ¬åœ°ç›®å½•ï¼Œç›®å½•å‰é¢æ˜¯æœ¬æœºç›®å½•ï¼Œåé¢æ˜¯é•œåƒç›®å½•
+				ä¾‹å­docker run --rm-i -t -v /home/hyzhou/docker:/data:rw ubuntu:14.04 /bin/bash
+--volumes-from		  ä»å®¹å™¨æŒ‚è½½å…±äº«ç›®å½•
+--name string		  å®¹å™¨åå­—
+--dns	              	  è®¾ç½®å®¹å™¨çš„DNSæœåŠ¡å™¨
+--net	        	  è®¾ç½®å®¹å™¨çš„ç½‘ç»œè¿æ¥æ–¹å¼bridge,none,Container:<name|id>,host
+--ip/--ip6		  å®¹å™¨çš„ipåœ°å€
 ```
-ÒÔÏÂÎªÈ«Ìåoption
+ä»¥ä¸‹ä¸ºå…¨ä½“option
 ```
       --add-host value              Add a custom host-to-IP mapping (host:ip) (default [])
   -a, --attach value                Attach to STDIN, STDOUT or STDERR (default [])
@@ -123,172 +123,172 @@ docker run  [OPTIONS] IMAGE[:TAG] [COMMAND] [ARG...]
   -w, --workdir string              Working directory inside the container
 ```
 ### docker start
-* Óï·¨
+* è¯­æ³•
 ```
 docker start [OPTIONS] CONTAINER [CONTAINER...]
 ```
-* Æô¶¯´´½¨ÁËµ«Ã»ÓĞÔËĞĞµÄÈİÆ÷
-Options°üÀ¨
+* å¯åŠ¨åˆ›å»ºäº†ä½†æ²¡æœ‰è¿è¡Œçš„å®¹å™¨
+OptionsåŒ…æ‹¬
 ```
-  -a, --attach               Á¬½ÓÈİÆ÷µÄstdout¡¢stderrºÍĞÅºÅ
-      --detach-keys string   ÖØÔØkey sequenceÓÃÓÚÀë¿ªÈİÆ÷
-  -i, --interactive          Á¬½ÓÈİÆ÷µÄstdin
+  -a, --attach               è¿æ¥å®¹å™¨çš„stdoutã€stderrå’Œä¿¡å·
+      --detach-keys string   é‡è½½key sequenceç”¨äºç¦»å¼€å®¹å™¨
+  -i, --interactive          è¿æ¥å®¹å™¨çš„stdin
 ```
 ### docker commit
-* Óï·¨
+* è¯­æ³•
 ```
 docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
 ```
-* ´´½¨Ò»¸öĞÂµÄ¾µÏñ
-* CONTAINERĞèÒª±»±¸·İµÄ¾µÏñÃû×Ö
-* REPOSITORY¾µÏñ²Ö¿â£¬¿ÉÒÔÊÇ±¾µØ»òÊÇÔ¶³Ì
+* åˆ›å»ºä¸€ä¸ªæ–°çš„é•œåƒ
+* CONTAINERéœ€è¦è¢«å¤‡ä»½çš„é•œåƒåå­—
+* REPOSITORYé•œåƒä»“åº“ï¼Œå¯ä»¥æ˜¯æœ¬åœ°æˆ–æ˜¯è¿œç¨‹
 * options
 ```
-  -a, --author string    ×÷Õß
-  -c, --change value     Ê¹ÓÃDockerfileÖĞµÄÖ¸Áî
-  -m, --message string   ËµÃ÷
-  -p, --pause            Ìá½»Ê±ÔİÍ£ÈİÆ÷£¬Ä¬ÈÏ¿ªÆô
+  -a, --author string    ä½œè€…
+  -c, --change value     ä½¿ç”¨Dockerfileä¸­çš„æŒ‡ä»¤
+  -m, --message string   è¯´æ˜
+  -p, --pause            æäº¤æ—¶æš‚åœå®¹å™¨ï¼Œé»˜è®¤å¼€å¯
 ```
 ### docker build
-* Óï·¨
+* è¯­æ³•
 ```
  docker build [OPTIONS] PATH | URL | -
 ```
-* ÀûÓÃdockerfile´´½¨ĞÂ¾µÏñ
-* PATH | URL | - ÎªdockerfileÂ·¾¶
+* åˆ©ç”¨dockerfileåˆ›å»ºæ–°é•œåƒ
+* PATH | URL | - ä¸ºdockerfileè·¯å¾„
 * options
 ```
-      --build-arg value         ÉèÖÃ»·¾³±äÁ¿
-      --cgroup-parent string    ÉèÖÃ¸¸cgroup
-      --cpu-period int          cpuÊ¹ÓÃÖÜÆÚ
-      --cpu-quota int           cpuÊ¹ÓÃÁ¿
-  -c, --cpu-shares int          ÓÅÏÈ¼¶
-      --cpuset-cpus string      ÉèÖÃÔËĞĞµÄcpu±àºÅ
-      --cpuset-mems string      ÉèÖÃÊ¹ÓÃÄÚ´æµÄ±êºÅ
-      --disable-content-trust   Ìø¹ı¾µÏñÑéÖ¤
-  -f, --file string             dockerfileÃû×Ö£¬Ä¬ÈÏÎªPATH/Dockerfile
-      --force-rm                ÒÆ³ıÖĞ¼ä²úÉúµÄ¾µÏñ£¬ÎŞÂÛÊÇ·ñ³É¹¦build
-      --isolation string        Ö¸¶¨ÈİÆ÷µÄ·ÖÀà¼¼Êõ
-      --label value             ÉèÖÃÔªÊı¾İ
-  -m, --memory string           ÄÚ´æÏŞÖÆ
-      --memory-swap string      ½»»»·ÖÇøÏŞÖÆ£¬-1ÎªÎŞÏŞÖÆ
-      --no-cache                ²»Ê¹ÓÃcache
-      --pull                    ×ÜÊÇ´´½¨×îĞÂ°æ±¾µÄ¾µÏñ
-  -q, --quiet                   ³É¹¦Ê±²»´òÓ¡ID
-      --rm                      ÒÆ³ıÖĞ¼ä²úÉúµÄ¾µÏñ£¬µ±³É¹¦buildÊ±
-      --shm-size string        	¹²ÏíÄÚ´æ/dev/shmµÄ´óĞ¡,Ä¬ÈÏ64MB
-  -t, --tag value               Ãû³ÆºÍ±êÇ©
-      --ulimit value            ulimitÓÃÓÚshellÆô¶¯½ø³ÌËùÕ¼ÓÃµÄ×ÊÔ´
+      --build-arg value         è®¾ç½®ç¯å¢ƒå˜é‡
+      --cgroup-parent string    è®¾ç½®çˆ¶cgroup
+      --cpu-period int          cpuä½¿ç”¨å‘¨æœŸ
+      --cpu-quota int           cpuä½¿ç”¨é‡
+  -c, --cpu-shares int          ä¼˜å…ˆçº§
+      --cpuset-cpus string      è®¾ç½®è¿è¡Œçš„cpuç¼–å·
+      --cpuset-mems string      è®¾ç½®ä½¿ç”¨å†…å­˜çš„æ ‡å·
+      --disable-content-trust   è·³è¿‡é•œåƒéªŒè¯
+  -f, --file string             dockerfileåå­—ï¼Œé»˜è®¤ä¸ºPATH/Dockerfile
+      --force-rm                ç§»é™¤ä¸­é—´äº§ç”Ÿçš„é•œåƒï¼Œæ— è®ºæ˜¯å¦æˆåŠŸbuild
+      --isolation string        æŒ‡å®šå®¹å™¨çš„åˆ†ç±»æŠ€æœ¯
+      --label value             è®¾ç½®å…ƒæ•°æ®
+  -m, --memory string           å†…å­˜é™åˆ¶
+      --memory-swap string      äº¤æ¢åˆ†åŒºé™åˆ¶ï¼Œ-1ä¸ºæ— é™åˆ¶
+      --no-cache                ä¸ä½¿ç”¨cache
+      --pull                    æ€»æ˜¯åˆ›å»ºæœ€æ–°ç‰ˆæœ¬çš„é•œåƒ
+  -q, --quiet                   æˆåŠŸæ—¶ä¸æ‰“å°ID
+      --rm                      ç§»é™¤ä¸­é—´äº§ç”Ÿçš„é•œåƒï¼Œå½“æˆåŠŸbuildæ—¶
+      --shm-size string        	å…±äº«å†…å­˜/dev/shmçš„å¤§å°,é»˜è®¤64MB
+  -t, --tag value               åç§°å’Œæ ‡ç­¾
+      --ulimit value            ulimitç”¨äºshellå¯åŠ¨è¿›ç¨‹æ‰€å ç”¨çš„èµ„æº
 ```
 ### docker images
-* Óï·¨
+* è¯­æ³•
 ```
 docker images [OPTIONS] [REPOSITORY[:TAG]]
 ```
-* ÁĞ³ö±¾µØµÄ¾µÏñ
-* [REPOSITORY[:TAG]]ÖĞ¿ÉÒÔÉè¶¨¹Ø¼ü×Ö
+* åˆ—å‡ºæœ¬åœ°çš„é•œåƒ
+* [REPOSITORY[:TAG]]ä¸­å¯ä»¥è®¾å®šå…³é”®å­—
 * options
 ```
-  -a, --all             Õ¹Ê¾ËùÓĞ£¬Ä¬ÈÏÒş²ØÖĞ¼ä¹ı³Ì¾µÏñ
-      --digests         ÏÔÊ¾ÕªÒª
-  -f, --filter value    ¸ù¾İÌõ¼ş¹ıÂËÊä³ö
-      --format string   ÓÃgoÄ£°å¸ñÊ½»¯Êä³ö
-      --no-trunc        ²»Òª²Ã¼ôÊä³ö£¨id£©
-  -q, --quiet           Ö»´òÓ¡¾µÏñID
+  -a, --all             å±•ç¤ºæ‰€æœ‰ï¼Œé»˜è®¤éšè—ä¸­é—´è¿‡ç¨‹é•œåƒ
+      --digests         æ˜¾ç¤ºæ‘˜è¦
+  -f, --filter value    æ ¹æ®æ¡ä»¶è¿‡æ»¤è¾“å‡º
+      --format string   ç”¨goæ¨¡æ¿æ ¼å¼åŒ–è¾“å‡º
+      --no-trunc        ä¸è¦è£å‰ªè¾“å‡ºï¼ˆidï¼‰
+  -q, --quiet           åªæ‰“å°é•œåƒID
 ```
 ### docker network
-* docker networkÓĞ6¸ö×ÓÃüÁî¡¢
+* docker networkæœ‰6ä¸ªå­å‘½ä»¤ã€
 #### docker network connect
-* Óï·¨
+* è¯­æ³•
 ```
 docker network connect [OPTIONS] NETWORK CONTAINER
 ```
-* ½«Ò»¸öÈİÆ÷½ÓÈëÍøÂç
-* networkÎª½ÓÈëÍøÂçµÄÃû×Ö
-* containerÎªÈİÆ÷Ãû×Ö
-* options£º
+* å°†ä¸€ä¸ªå®¹å™¨æ¥å…¥ç½‘ç»œ
+* networkä¸ºæ¥å…¥ç½‘ç»œçš„åå­—
+* containerä¸ºå®¹å™¨åå­—
+* optionsï¼š
 ```
-      --alias value           ÎªÈİÆ÷Ìí¼ÓÍøÂç±ğÃû
+      --alias value           ä¸ºå®¹å™¨æ·»åŠ ç½‘ç»œåˆ«å
       --ip string             IP Address
       --ip6 string            IPv6 Address
-      --link value            Ìí¼Óµ½ÆäËûÈİÆ÷µÄÁ¬½ÓÉÏ
-      --link-local-ip value   ÎªÈİÆ÷Ôö¼Ó±¾µØÁ¬½Ó
+      --link value            æ·»åŠ åˆ°å…¶ä»–å®¹å™¨çš„è¿æ¥ä¸Š
+      --link-local-ip value   ä¸ºå®¹å™¨å¢åŠ æœ¬åœ°è¿æ¥
 ```
 #### docker network create
-* Óï·¨
+* è¯­æ³•
 ```
 docker network create [OPTIONS] NETWORK
 ```
-* ´´½¨ÍøÂç
-* networkÎªÍøÂçÃû×Ö
+* åˆ›å»ºç½‘ç»œ
+* networkä¸ºç½‘ç»œåå­—
 * options
 ```
-      --aux-address value    ÍøÂçÇı¶¯ÓÃµ½¸¨Öúipv4»ò6µØÖ·
-  -d, --driver string        Ö¸¶¨ÍøÂçÇı¶¯£¬Ä¬ÈÏÎªbridge
-      --gateway value        IPv4»òIPv6µÄ×ÓÍøÍø¹Ø
-      --internal             ÏŞÖÆÍâ²¿·ÃÎÊ¸ÃÍøÂç
-      --ip-range value       ´ÓÒ»¶ÎµØÖ·ÖĞ·ÖÅäip
-      --ipam-driver string   ipµØÖ·¹ÜÀíÇı¶¯
-      --ipam-opt value       ipµØÖ·¹ÜÀíÇı¶¯µÄÑ¡Ïî
-      --ipv6                 Ê¹ÓÃipv6
-      --label value          ÉèÖÃÔªÊı¾İ
-  -o, --opt value            ÍøÂçÇı¶¯Ñ¡Ïî
-      --subnet value         CIDR¸ñÊ½µÄ×ÓÍø
+      --aux-address value    ç½‘ç»œé©±åŠ¨ç”¨åˆ°è¾…åŠ©ipv4æˆ–6åœ°å€
+  -d, --driver string        æŒ‡å®šç½‘ç»œé©±åŠ¨ï¼Œé»˜è®¤ä¸ºbridge
+      --gateway value        IPv4æˆ–IPv6çš„å­ç½‘ç½‘å…³
+      --internal             é™åˆ¶å¤–éƒ¨è®¿é—®è¯¥ç½‘ç»œ
+      --ip-range value       ä»ä¸€æ®µåœ°å€ä¸­åˆ†é…ip
+      --ipam-driver string   ipåœ°å€ç®¡ç†é©±åŠ¨
+      --ipam-opt value       ipåœ°å€ç®¡ç†é©±åŠ¨çš„é€‰é¡¹
+      --ipv6                 ä½¿ç”¨ipv6
+      --label value          è®¾ç½®å…ƒæ•°æ®
+  -o, --opt value            ç½‘ç»œé©±åŠ¨é€‰é¡¹
+      --subnet value         CIDRæ ¼å¼çš„å­ç½‘
 ```
 ##### docker network disconnect
-* Óï·¨
+* è¯­æ³•
 ```
 docker network disconnect [OPTIONS] NETWORK CONTAINER
 ```
-* ¶Ï¿ªÍøÂç
+* æ–­å¼€ç½‘ç»œ
 options
 ```
-  -f, --force   Ç¿ÖÆ¶Ï¿ª
+  -f, --force   å¼ºåˆ¶æ–­å¼€
 ```
 #### docker network inspect
-* Óï·¨
+* è¯­æ³•
 ```
 docker network inspect [OPTIONS] NETWORK [NETWORK...]
 ```
-* Õ¹Ê¾ÍøÂçÏ¸½Ú
+* å±•ç¤ºç½‘ç»œç»†èŠ‚
 * Options
 ```
-  -f, --format string 	²ÉÓÃgoÄ£°å¸ñÊ½»¯Êä³ö
+  -f, --format string 	é‡‡ç”¨goæ¨¡æ¿æ ¼å¼åŒ–è¾“å‡º
 ```
 #### docker network ls
-* Óï·¨
+* è¯­æ³•
 ```
 docker network ls [OPTIONS]
 ```
-* ÁĞ³öÍøÂç
-* options£º
+* åˆ—å‡ºç½‘ç»œ
+* optionsï¼š
 ```
-  -f, --filter value   É¸Ñ¡½á¹û
-      --no-trunc       ²»½Ø¶ÏÊä³ö
-  -q, --quiet          Ö»´òÓ¡¾µÏñID
+  -f, --filter value   ç­›é€‰ç»“æœ
+      --no-trunc       ä¸æˆªæ–­è¾“å‡º
+  -q, --quiet          åªæ‰“å°é•œåƒID
 ```
 #### docker network rm
-* Óï·¨
+* è¯­æ³•
 ```
 docker network rm NETWORK [NETWORK...]
 ```
-* ÒÆ³ıÒ»Ğ©ÍøÂç
-## ´´½¨Ò»¸ö»ù´¡¾µÏñÎªubuntuµÄdocker¾µÏñ£¬ËæºóÔÙÆäÖĞ¼ÓÈënginx·şÎñÆ÷
-* ´´½¨¾µÏñ
+* ç§»é™¤ä¸€äº›ç½‘ç»œ
+## åˆ›å»ºä¸€ä¸ªåŸºç¡€é•œåƒä¸ºubuntuçš„dockeré•œåƒï¼Œéšåå†å…¶ä¸­åŠ å…¥nginxæœåŠ¡å™¨
+* åˆ›å»ºé•œåƒ
 ```
 sudo run docker -it --name mydocker ubuntu /bin/bash
 ```
-* ½øÈë¾µÏñºó
+* è¿›å…¥é•œåƒå
 ```
 apt-get update
 apt-get install nginx -y
 apt-get install vim -y
-nginx -t //ÕÒµ½ÅäÖÃÎÄ¼ş
+nginx -t //æ‰¾åˆ°é…ç½®æ–‡ä»¶
 vi /etc/nginx/nginx.conf
 ```
-* ĞŞ¸ÄÅäÖÃÎÄ¼ş
-ÔÚhtmlÄ£¿éÏÂ£¬É¾³ıvirtual host
-¼ÓÈë
+* ä¿®æ”¹é…ç½®æ–‡ä»¶
+åœ¨htmlæ¨¡å—ä¸‹ï¼Œåˆ é™¤virtual host
+åŠ å…¥
 ```
 	server {
 		listen 80;
@@ -297,40 +297,40 @@ vi /etc/nginx/nginx.conf
 		index index.html;
 		}}
 ```
-* ÔÚ/home/ ÏÂĞÂ½¨index.html£¬Ğ´Ò»¸ö°üº¬×Ô¼ºĞÅÏ¢µÄhtmlÎÄ¼ş
-* ÔÚ¸ùÄ¿Â¼ÏÂĞÂ½¨Ò»¸öÔËĞĞ½Å±¾ run.sh
+* åœ¨/home/ ä¸‹æ–°å»ºindex.htmlï¼Œå†™ä¸€ä¸ªåŒ…å«è‡ªå·±ä¿¡æ¯çš„htmlæ–‡ä»¶
+* åœ¨æ ¹ç›®å½•ä¸‹æ–°å»ºä¸€ä¸ªè¿è¡Œè„šæœ¬ run.sh
 ```
 nginx
 tail -f /var/log/nginx/access.log
 ```
-* ÍË³ödocker
-* Ö´ĞĞÃüÁî,±£´æ¾µÏñ
+* é€€å‡ºdocker
+* æ‰§è¡Œå‘½ä»¤,ä¿å­˜é•œåƒ
 ```
 docker commit mydocker mydocker:v4
 ```
-* ¼ì²éĞ§¹û
+* æ£€æŸ¥æ•ˆæœ
 ```
 docker run -it --net=host mydocker:v4 /bin/bash /run.sh
 ```
-* ÔÚÑàÔÆÉÏ½«80¶Ë¿Ú×ª·¢µ½8888¶Ë¿ÚÉÏ
-* ÊäÈëhttp://162.105.174.33:8888/ ¿´µ½ÍøÒ³
+* åœ¨ç‡•äº‘ä¸Šå°†80ç«¯å£è½¬å‘åˆ°8888ç«¯å£ä¸Š
+* è¾“å…¥http://162.105.174.33:8888/ çœ‹åˆ°ç½‘é¡µ
 ![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework3/index.jpg)
-* ´´½¨×Ô¼ºµÄÍøÂç,Ä¬ÈÏÎªbridge
+* åˆ›å»ºè‡ªå·±çš„ç½‘ç»œ,é»˜è®¤ä¸ºbridge
 ```
 docker network create mynet
 ```
-* ´´½¨ĞÂµÄ¾µÏñ£¬²¢½«Æä´ÓÔ­ÍøÂçÖĞ¶Ï¿ª
+* åˆ›å»ºæ–°çš„é•œåƒï¼Œå¹¶å°†å…¶ä»åŸç½‘ç»œä¸­æ–­å¼€
 ```
 docker run -it --net=bridge --name mydocker -d -p 80:80 mydocker:v4 /bin/bash /run.sh
 docker network disconnect bridge mydocker
 ```
-* ´ËÊ±ÍøÒ³ÎŞ·¨´ò¿ª
-* Á¬½Ómynet
+* æ­¤æ—¶ç½‘é¡µæ— æ³•æ‰“å¼€
+* è¿æ¥mynet
 ```
 docker network connect mynet mydocker
 ```
-* ´ËÊ±ÍøÒ³Õı³£´ò¿ª
-* »ñµÃÍø¹ØĞÅÏ¢
+* æ­¤æ—¶ç½‘é¡µæ­£å¸¸æ‰“å¼€
+* è·å¾—ç½‘å…³ä¿¡æ¯
 ```
 docker network inspect mynet
 {
@@ -363,58 +363,58 @@ docker network inspect mynet
         "Labels": {}
     }
 ```
-* ËŞÖ÷·ÃÎÊ
+* å®¿ä¸»è®¿é—®
 ```
 root@oo-lab:~# curl 172.18.0.1:80
 <!DOCTYPE html>
-<p>Ñ§ºÅ£º1400012801</p>
-<p>Ãû×Ö£ºÒ¶îÈ´ï</p>
-<p>µ½´ËÒ»ÓÎ</p>
+<p>å­¦å·ï¼š1400012801</p>
+<p>åå­—ï¼šå¶é’Šè¾¾</p>
+<p>åˆ°æ­¤ä¸€æ¸¸</p>
 </html>`
 ```
 
-## Çë²éÔÄÏà¹Ø×ÊÁÏºÍdockerÎÄµµ£¬²ûÊönull,bridge,host,overlayÍøÂçÄ£Ê½µÄÇø±ğ
-### noneÄ£Ê½
-DockerÈİÆ÷ÓµÓĞ×Ô¼ºµÄNetwork Namespace£¬µ«Ã»ÓĞÈÎºÎÍøÂçÅäÖÃ£¨Íø¿¨£¬ip£¬Â·ÓÉĞÅÏ¢£©£¬ĞèÒª×Ô¼ºÊÖ¶¯Ìí¼Ó
-### hostÄ£Ê½
-Ò»°ãÈİÆ÷´´½¨Ê±»á´´½¨×Ô¼ºµÄNetwork Namespace£¬ÓÃÓÚºÍËŞÖ÷ÍøÂç½øĞĞ¸ôÀë£¬µ±Ê±hostÄ£Ê½ÈİÆ÷ºÍËŞÖ÷¹²ÓÃÒ»¸önemaspace£¬Ê¹ÓÃËŞÖ÷µÄip£¬¶Ë¿Ú
-### containerÄ£Ê½
-ÈİÆ÷Í¬Ñù²»»á´´½¨×Ô¼ºµÄnamespace£¬ÓĞÊ±ºÍÁíÍâÒ»¸öÈİÆ÷¹²ÓÃÒ»¸önamespace
-### bridgeÄ£Ê½
-Ä¬ÈÏµÄÍøÂçÄ£Ê½¡£Ã¿¸ödocker¶¼ÓĞ×Ô¼ºµÄnamespace£¬²¢ÉèÖÃip£¬²¢½«ÈİÆ÷Á¬½Óµ½docker0µÄĞéÄâÍøÇÅÉÏ¡£docker0ÊÇdocker×Ô¼º´´½¨µÄÍøÂç¡£¹¤×÷·½Ê½ÀàËÆÎïÀí½»»»»úµÄ¹¤×÷ĞÎÊ½£¬docker»áÏÈ»ñµÃÒ»¸ö×ÓÍøµÄÍø¶Î£¨Èç172.17.0.0/16£©£¬½« 172.17.42.1/16·ÖÅä¸ødocker0ÍøÇÅ£¬³Ğµ£Íø¹ØµÄ¹¤×÷£¬×ÓÍøÆäËûip»á·Ö¸øÆäËûÁ¬½Óµ½ËûÉÏÃæµÄdocker¡£
-### overlayÄ£Ê½
-* overlayÄ£Ê½ÔÚdockerÖĞºÍswarm¼¯ÈºÊÇÃÜÇĞÏà¹ØµÄ¡£
-* overlayÄ£Ê½Ìá¹©ÁË¿ç»úÆ÷µÄÈİÆ÷µÄ»¥Ïà·ÃÎÊ¡£
-* µÚ¶ş´úoverlayÄ£Ê½ÖĞ£¬Ö±½Óµ÷ÓÃswarmÀ´ÊµÏÖoverlayÄ£Ê½
+## è¯·æŸ¥é˜…ç›¸å…³èµ„æ–™å’Œdockeræ–‡æ¡£ï¼Œé˜è¿°null,bridge,host,overlayç½‘ç»œæ¨¡å¼çš„åŒºåˆ«
+### noneæ¨¡å¼
+Dockerå®¹å™¨æ‹¥æœ‰è‡ªå·±çš„Network Namespaceï¼Œä½†æ²¡æœ‰ä»»ä½•ç½‘ç»œé…ç½®ï¼ˆç½‘å¡ï¼Œipï¼Œè·¯ç”±ä¿¡æ¯ï¼‰ï¼Œéœ€è¦è‡ªå·±æ‰‹åŠ¨æ·»åŠ 
+### hostæ¨¡å¼
+ä¸€èˆ¬å®¹å™¨åˆ›å»ºæ—¶ä¼šåˆ›å»ºè‡ªå·±çš„Network Namespaceï¼Œç”¨äºå’Œå®¿ä¸»ç½‘ç»œè¿›è¡Œéš”ç¦»ï¼Œå½“æ—¶hostæ¨¡å¼å®¹å™¨å’Œå®¿ä¸»å…±ç”¨ä¸€ä¸ªnemaspaceï¼Œä½¿ç”¨å®¿ä¸»çš„ipï¼Œç«¯å£
+### containeræ¨¡å¼
+å®¹å™¨åŒæ ·ä¸ä¼šåˆ›å»ºè‡ªå·±çš„namespaceï¼Œæœ‰æ—¶å’Œå¦å¤–ä¸€ä¸ªå®¹å™¨å…±ç”¨ä¸€ä¸ªnamespace
+### bridgeæ¨¡å¼
+é»˜è®¤çš„ç½‘ç»œæ¨¡å¼ã€‚æ¯ä¸ªdockeréƒ½æœ‰è‡ªå·±çš„namespaceï¼Œå¹¶è®¾ç½®ipï¼Œå¹¶å°†å®¹å™¨è¿æ¥åˆ°docker0çš„è™šæ‹Ÿç½‘æ¡¥ä¸Šã€‚docker0æ˜¯dockerè‡ªå·±åˆ›å»ºçš„ç½‘ç»œã€‚å·¥ä½œæ–¹å¼ç±»ä¼¼ç‰©ç†äº¤æ¢æœºçš„å·¥ä½œå½¢å¼ï¼Œdockerä¼šå…ˆè·å¾—ä¸€ä¸ªå­ç½‘çš„ç½‘æ®µï¼ˆå¦‚172.17.0.0/16ï¼‰ï¼Œå°† 172.17.42.1/16åˆ†é…ç»™docker0ç½‘æ¡¥ï¼Œæ‰¿æ‹…ç½‘å…³çš„å·¥ä½œï¼Œå­ç½‘å…¶ä»–ipä¼šåˆ†ç»™å…¶ä»–è¿æ¥åˆ°ä»–ä¸Šé¢çš„dockerã€‚
+### overlayæ¨¡å¼
+* overlayæ¨¡å¼åœ¨dockerä¸­å’Œswarmé›†ç¾¤æ˜¯å¯†åˆ‡ç›¸å…³çš„ã€‚
+* overlayæ¨¡å¼æä¾›äº†è·¨æœºå™¨çš„å®¹å™¨çš„äº’ç›¸è®¿é—®ã€‚
+* ç¬¬äºŒä»£overlayæ¨¡å¼ä¸­ï¼Œç›´æ¥è°ƒç”¨swarmæ¥å®ç°overlayæ¨¡å¼
 ```
 docker swarm init --advertise-addr 172.16.6.153
 ```
-* µÃµ½joinÃüÁî
+* å¾—åˆ°joinå‘½ä»¤
 ```
 docker swarm join \
     --token SWMTKN-1-4u0sy656s8vxum227x29gqzhqizafk1o9lpgwu4kdpwfpcerz2-chl8std2ky8yvhy2n851e2m9j \
     172.16.6.153:2377
 ```
-* ÔÚÁíÍâÒ»Ì¨»úÆ÷ÉÏÖ´ĞĞÃüÁî
+* åœ¨å¦å¤–ä¸€å°æœºå™¨ä¸Šæ‰§è¡Œå‘½ä»¤
 ```
 Error response from daemon: Timeout was reached before node was joined. The attempt to join the swarm will continue in the background. Use the "docker info" command to see the current swarm status of your node.
 ```
-* ³öÁËµãÃ«²¡(GG)
-* ÔÚmanagerÉÏ²é¿´½Úµã,¿ÉÒÔ¿´µ½¹ÜÀí½Úµã
+* å‡ºäº†ç‚¹æ¯›ç—…(GG)
+* åœ¨managerä¸ŠæŸ¥çœ‹èŠ‚ç‚¹,å¯ä»¥çœ‹åˆ°ç®¡ç†èŠ‚ç‚¹
 ```
 docker node ls
 ID                           HOSTNAME  STATUS  AVAILABILITY  MANAGER STATUS
 7kuftpv9nz94acl3nfy281jkh *  oo-lab    Ready   Active        Leader
 ```
-## ÔÄ¶ÁmesosÖĞ¸ºÔğÓëdocker½»»¥µÄ´úÂë£¬Ì¸Ì¸mesosÊÇÔõÑùÓëdocker½øĞĞ½»»¥µÄ£¬²¢½éÉÜdockerÀàÖĞrunº¯Êı´óÖÂ×öÁËÊ²Ã´¡£
-* docker.cppÊÇ¸ºÔğ¹¹½¨dockerÔËĞĞÃüÁîµÄ
-* spec.cpp½«infoĞÅÏ¢°ü×°³Éc++Àà
-* executor.cppÊÇÔËĞĞdockerµÄ´úÂë£¬¾ÍÊÇframeworkÖĞµÄexecutor£¬¸ºÔğÖ´ĞĞdockerÖĞ°ü×°³öÀ´µÄÃüÁî
-* mesosºÍdockerµÄ½»»¥Ïàµ±ÓÚmesos½¨Á¢ÁËÒ»¸öexecutor£¬È»ºóµ÷ÓÃ¸÷ÖÖdockerÃüÁîÀ´¹ÜÀídocker£¬ºÍÈËÖ±½ÓÔËĞĞdockerÃ»ÓĞÊ²Ã´±¾ÖÊÇø±ğ£¬Ö»ÊÇ°üÁËÒ»¸ö¿ÇÓÃÓÚÔ¶³Ìµ÷ÓÃ
+## é˜…è¯»mesosä¸­è´Ÿè´£ä¸dockeräº¤äº’çš„ä»£ç ï¼Œè°ˆè°ˆmesosæ˜¯æ€æ ·ä¸dockerè¿›è¡Œäº¤äº’çš„ï¼Œå¹¶ä»‹ç»dockerç±»ä¸­runå‡½æ•°å¤§è‡´åšäº†ä»€ä¹ˆã€‚
+* docker.cppæ˜¯è´Ÿè´£æ„å»ºdockerè¿è¡Œå‘½ä»¤çš„
+* spec.cppå°†infoä¿¡æ¯åŒ…è£…æˆc++ç±»
+* executor.cppæ˜¯è¿è¡Œdockerçš„ä»£ç ï¼Œå°±æ˜¯frameworkä¸­çš„executorï¼Œè´Ÿè´£æ‰§è¡Œdockerä¸­åŒ…è£…å‡ºæ¥çš„å‘½ä»¤
+* mesoså’Œdockerçš„äº¤äº’ç›¸å½“äºmesoså»ºç«‹äº†ä¸€ä¸ªexecutorï¼Œç„¶åè°ƒç”¨å„ç§dockerå‘½ä»¤æ¥ç®¡ç†dockerï¼Œå’Œäººç›´æ¥è¿è¡Œdockeræ²¡æœ‰ä»€ä¹ˆæœ¬è´¨åŒºåˆ«ï¼Œåªæ˜¯åŒ…äº†ä¸€ä¸ªå£³ç”¨äºè¿œç¨‹è°ƒç”¨
 
 ### docker run
-* ¼ì²écontainnerInfoÊÇ·ñ´æÔÚ
-* ¿ªÊ¼¹¹½¨ÃüÁî²ÎÊı
+* æ£€æŸ¥containnerInfoæ˜¯å¦å­˜åœ¨
+* å¼€å§‹æ„å»ºå‘½ä»¤å‚æ•°
 ```
   vector<string> argv;
   argv.push_back(path);
@@ -426,29 +426,29 @@ ID                           HOSTNAME  STATUS  AVAILABILITY  MANAGER STATUS
     argv.push_back("--privileged");
   }
 ```
-* ¼ì²é×ÊÔ´ĞÅÏ¢£¬²¢Éè¶¨¶ÔÓ¦²ÎÊı£¨´úÂë²»ÌùÁË£©
-* ¼ì²é»·¾³±äÁ¿£¬²¢Éè¶¨ÃüÁî²ÎÊı
-* ¼ÓÈëmesos sandboxÏà¹Ø²ÎÊı
-* ¼ì²é¹ÒÔØĞÅÏ¢£¬²¢Éè¶¨ÃüÁî²ÎÊı
-* ½«sandboxµÄÄ¿Â¼¼ÓÈëÈİÆ÷ÖĞ£¬Í¨¹ı¹ÒÔØµÄ·½Ê½
-* ¼ì²é·Ö¾í£¨volume£©£¿Çı¶¯µÄ¸öÊı£¬mesosÖ»Ö§³ÖÒ»¸ö£¨»¹ÊÇdocker£¿£©
-* ¼ÓÈëÍøÂçĞÅÏ¢
-* ¼ÓÈëhostname
-* ¼ÓÈëdockerµÄoptionĞÅÏ¢
-* ¼ÓÈë¶Ë¿ÚÓ³Éä
-* ¼ÓÈëÓ²ÅÌĞÅÏ¢
-* ¼ÓÈëÃüÁîĞĞ²ÎÊı
-* ¼ÓÈëÈİÆ÷Ãû×Ö
-* ²ÎÊı¹¹½¨Íê±Ï£¬Ğ´ÈëÈÕÖ¾
-* ÉèÖÃ×ÓÏß³ÌÏµÍ³»·¾³±äÁ¿
-* ĞÂ½¨×ÓÏß³ÌÊµÌå
-* ÔËĞĞ×ÓÏß³Ì
+* æ£€æŸ¥èµ„æºä¿¡æ¯ï¼Œå¹¶è®¾å®šå¯¹åº”å‚æ•°ï¼ˆä»£ç ä¸è´´äº†ï¼‰
+* æ£€æŸ¥ç¯å¢ƒå˜é‡ï¼Œå¹¶è®¾å®šå‘½ä»¤å‚æ•°
+* åŠ å…¥mesos sandboxç›¸å…³å‚æ•°
+* æ£€æŸ¥æŒ‚è½½ä¿¡æ¯ï¼Œå¹¶è®¾å®šå‘½ä»¤å‚æ•°
+* å°†sandboxçš„ç›®å½•åŠ å…¥å®¹å™¨ä¸­ï¼Œé€šè¿‡æŒ‚è½½çš„æ–¹å¼
+* æ£€æŸ¥åˆ†å·ï¼ˆvolumeï¼‰ï¼Ÿé©±åŠ¨çš„ä¸ªæ•°ï¼Œmesosåªæ”¯æŒä¸€ä¸ªï¼ˆè¿˜æ˜¯dockerï¼Ÿï¼‰
+* åŠ å…¥ç½‘ç»œä¿¡æ¯
+* åŠ å…¥hostname
+* åŠ å…¥dockerçš„optionä¿¡æ¯
+* åŠ å…¥ç«¯å£æ˜ å°„
+* åŠ å…¥ç¡¬ç›˜ä¿¡æ¯
+* åŠ å…¥å‘½ä»¤è¡Œå‚æ•°
+* åŠ å…¥å®¹å™¨åå­—
+* å‚æ•°æ„å»ºå®Œæ¯•ï¼Œå†™å…¥æ—¥å¿—
+* è®¾ç½®å­çº¿ç¨‹ç³»ç»Ÿç¯å¢ƒå˜é‡
+* æ–°å»ºå­çº¿ç¨‹å®ä½“
+* è¿è¡Œå­çº¿ç¨‹
 
 
-## Ğ´Ò»¸öframework£¬ÒÔÈİÆ÷µÄ·½Ê½ÔËĞĞtask£¬ÔËĞĞÇ°Ãæ±£´æµÄnginx·şÎñÆ÷¾µÏñ£¬ÍøÂçÎªHOST¡£
-* ÖØÆôagent½ø³Ì£¬¼ÓÈëÑ¡Ïî--containerizers=docker,mesos
-* ÔÚpymesosÉÏĞŞ¸Ä´úÂë
-* ÉèÖÃ¿ò¼ÜĞÅÏ¢£¬²¢´´½¨Ò»¸öMesosSchedulerDriver
+## å†™ä¸€ä¸ªframeworkï¼Œä»¥å®¹å™¨çš„æ–¹å¼è¿è¡Œtaskï¼Œè¿è¡Œå‰é¢ä¿å­˜çš„nginxæœåŠ¡å™¨é•œåƒï¼Œç½‘ç»œä¸ºHOSTã€‚
+* é‡å¯agentè¿›ç¨‹ï¼ŒåŠ å…¥é€‰é¡¹--containerizers=docker,mesos
+* åœ¨pymesosä¸Šä¿®æ”¹ä»£ç 
+* è®¾ç½®æ¡†æ¶ä¿¡æ¯ï¼Œå¹¶åˆ›å»ºä¸€ä¸ªMesosSchedulerDriver
 ```
     framework = Dict()
     framework.user = getpass.getuser()
@@ -462,7 +462,7 @@ ID                           HOSTNAME  STATUS  AVAILABILITY  MANAGER STATUS
         use_addict=True,
     )
 ```
-* MinimalSchedulerÀàÊµÏÖ
+* MinimalSchedulerç±»å®ç°
 ```
 class MinimalScheduler(Scheduler):
     def __init__(self):
@@ -470,49 +470,49 @@ class MinimalScheduler(Scheduler):
 
         
 
-#mesosÌá¹©×ÊÔ´Ê±µÄ´¦Àíº¯Êı            
+#mesosæä¾›èµ„æºæ—¶çš„å¤„ç†å‡½æ•°            
     def resourceOffers(self, driver, offers):    
 
                 
         filters = {'refuse_seconds': 5}
-        #·Ö·¢ÈÎÎñ
+        #åˆ†å‘ä»»åŠ¡
         for offer in offers:
 		cpus = self.getResource(offer.resources, 'cpus')
 		mem = self.getResource(offer.resources, 'mem')
 			
-		#Ö»ÔËĞĞÒ»¸ö
+		#åªè¿è¡Œä¸€ä¸ª
 		if self.Task_launched:
 		continue
 				
-		#×ÊÔ´¼ì²é	
+		#èµ„æºæ£€æŸ¥	
 		if cpus < TASK_CPU or mem < TASK_MEM:
 			continue
 		self.Task_launched=True	
 
-		#ÉèÖÃdockerĞÅÏ¢
+		#è®¾ç½®dockerä¿¡æ¯
 		DockerInfo = Dict()
 		DockerInfo.image = 'mydocker:v4'
 		DockerInfo.network = 'HOST'
 
-		#ÉèÖÃÈİÆ÷ĞÅÏ¢
+		#è®¾ç½®å®¹å™¨ä¿¡æ¯
 		ContainerInfo = Dict()
 		ContainerInfo.type = 'DOCKER'
 		ContainerInfo.docker = DockerInfo
 			
-		#ÉèÖÃÃüÁî
+		#è®¾ç½®å‘½ä»¤
 		CommandInfo = Dict()
 		CommandInfo.shell = False
 		CommandInfo.value = '/bin/bash'
 		CommandInfo.arguments = ['/run.sh']
 			
-		#´´½¨task
+		#åˆ›å»ºtask
 		task = Dict()
 		task_id = str(uuid.uuid4())
 		task.task_id.value = task_id
 		task.agent_id.value = offer.agent_id.value
 		task.name = 'mydocker'
 			
-		#½«ÃüÁîºÍÈİÆ÷¼ÓÈëtask
+		#å°†å‘½ä»¤å’Œå®¹å™¨åŠ å…¥task
 		task.container = ContainerInfo
 		task.command = CommandInfo
 
@@ -521,30 +521,27 @@ class MinimalScheduler(Scheduler):
            	     dict(name='mem', type='SCALAR', scalar={'value': TASK_MEM}),
         	    ]
 		
-		driver.launchTasks(offer.id, [task], filters) #µ÷¶ÈÈÎÎñ
+		driver.launchTasks(offer.id, [task], filters) #è°ƒåº¦ä»»åŠ¡
 
-    #×´Ì¬¸üĞÂ»Øµ÷
+    #çŠ¶æ€æ›´æ–°å›è°ƒ
     def statusUpdate(self, driver, update):
 		return
        
-	#½âÎö×ÊÔ´  
+	#è§£æèµ„æº  
     def getResource(self, res, name):
         for r in res:
             if r.name == name:
                 return r.scalar.value
         return 0.0
 ```
-* ÔËĞĞ½Å±¾
+* è¿è¡Œè„šæœ¬
 ```
 python scheduler.py 172.16.6.153
 ```
-* ¿ÉÒÔ¿´µ½agentÔÚÔËĞĞ
-<p>
-![pic3](https://github.com/magicfisk/mesos_learning/raw/master/homework3/agent.jpg)
-* dockerÔËĞĞ
-<p>
-![pic4](https://github.com/magicfisk/mesos_learning/raw/master/homework3/docker.jpg)
-* ÍøÒ³Õı³£·ÃÎÊ
-<p>
-![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework3/index.jpg)
+* å¯ä»¥çœ‹åˆ°agentåœ¨è¿è¡Œ
+![pic3](https://github.com/magicfisk/mesos_learning/raw/master/homework3/agent.jpg)</p>
+* dockerè¿è¡Œ
+![pic4](https://github.com/magicfisk/mesos_learning/raw/master/homework3/docker.jpg)</p>
+* ç½‘é¡µæ­£å¸¸è®¿é—®
+![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework3/index.jpg)</p>
 
