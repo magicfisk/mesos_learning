@@ -407,7 +407,10 @@ ID                           HOSTNAME  STATUS  AVAILABILITY  MANAGER STATUS
 7kuftpv9nz94acl3nfy281jkh *  oo-lab    Ready   Active        Leader
 ```
 ## 阅读mesos中负责与docker交互的代码，谈谈mesos是怎样与docker进行交互的，并介绍docker类中run函数大致做了什么。
-
+* docker.cpp是负责构建docker运行命令的
+* spec.cpp将info信息包装成c++类
+* executor.cpp是运行docker的代码，就是framework中的executor，负责执行docker中包装出来的命令
+* mesos和docker的交互相当于mesos建立了一个executor，然后调用各种docker命令来管理docker，和人直接运行docker没有什么本质区别，只是包了一个壳用于远程调用
 
 ### docker run
 * 检查containnerInfo是否存在
@@ -423,8 +426,8 @@ ID                           HOSTNAME  STATUS  AVAILABILITY  MANAGER STATUS
     argv.push_back("--privileged");
   }
 ```
-* 检查资源信息，并设定对应参数
-* 检查环境变量，并设定命令参数（代码不贴了）
+* 检查资源信息，并设定对应参数（代码不贴了）
+* 检查环境变量，并设定命令参数
 * 加入mesos sandbox相关参数
 * 检查挂载信息，并设定命令参数
 * 将sandbox的目录加入容器中，通过挂载的方式
