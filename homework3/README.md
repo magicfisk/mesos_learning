@@ -538,10 +538,10 @@ class MinimalScheduler(Scheduler):
 ```
 python scheduler.py 172.16.6.153
 ```
-* 可以看到agent在运行
-![pic3](https://github.com/magicfisk/mesos_learning/raw/master/homework3/agent.jpg)</p>
-* docker运行
-![pic4](https://github.com/magicfisk/mesos_learning/raw/master/homework3/docker.jpg)</p>
-* 网页正常访问
-![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework3/index.jpg)</p>
+* 可以看到agent在运行</p>
+![pic3](https://github.com/magicfisk/mesos_learning/raw/master/homework3/agent.jpg)
+* docker运行</p>
+![pic4](https://github.com/magicfisk/mesos_learning/raw/master/homework3/docker.jpg)
+* 网页正常访问</p>
+![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework3/index.jpg)
 
