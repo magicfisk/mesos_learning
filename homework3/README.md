@@ -14,24 +14,24 @@ docker run  [OPTIONS] IMAGE[:TAG] [COMMAND] [ARG...]
 
 * 常用options
 ```
--d						  后台 (前台默认)
--a, --attach value		  连接容器的stdin、stdout、stderr
--t				          使用终端。经常和 -i一起使用。
--i						  打开STDIN和容器交互。经常和 -t一起使用。
+-d			  后台 (前台默认)
+-a, --attach value	  连接容器的stdin、stdout、stderr
+-t			  使用终端。经常和 -i一起使用。
+-i			  打开STDIN和容器交互。经常和 -t一起使用。
 -m, --memory string    	  内存限制(单位:b, k, m or g)
 -c, --cpu-shares int   	  CPU优先级 (相对权重)
--u, --user string		  设置用户名
--w,--workdir string		  设置工作目录 默认为根目录
--e,--env value			  设置环境变量
--p						  将主机端口和容器端口设置转发 -p ip:80:80
+-u, --user string	  设置用户名
+-w,--workdir string	  设置工作目录 默认为根目录
+-e,--env value		  设置环境变量
+-p			  将主机端口和容器端口设置转发 -p ip:80:80
 -h,--hostname string      容器的主机名
--v, --volume value		  挂载本地目录，目录前面是本机目录，后面是镜像目录
-							例子docker run --rm-i -t -v /home/hyzhou/docker:/data:rw ubuntu:14.04 /bin/bash
---volumes-from			  从容器挂载共享目录
---name string			  容器名字
+-v, --volume value	  挂载本地目录，目录前面是本机目录，后面是镜像目录
+				例子docker run --rm-i -t -v /home/hyzhou/docker:/data:rw ubuntu:14.04 /bin/bash
+--volumes-from		  从容器挂载共享目录
+--name string		  容器名字
 --dns	              	  设置容器的DNS服务器
---net	        	  	  设置容器的网络连接方式bridge,none,Container:<name|id>,host
---ip/--ip6				  容器的ip地址
+--net	        	  设置容器的网络连接方式bridge,none,Container:<name|id>,host
+--ip/--ip6		  容器的ip地址
 ```
 以下为全体option
 ```
@@ -440,51 +440,51 @@ class MinimalScheduler(Scheduler):
         filters = {'refuse_seconds': 5}
         #分发任务
         for offer in offers:
-            cpus = self.getResource(offer.resources, 'cpus')
-            mem = self.getResource(offer.resources, 'mem')
+		cpus = self.getResource(offer.resources, 'cpus')
+		mem = self.getResource(offer.resources, 'mem')
 			
-			#只运行一个
-            if self.Task_launched:
-                continue
+		#只运行一个
+		if self.Task_launched:
+		continue
 				
-			#资源检查	
-            if cpus < TASK_CPU or mem < TASK_MEM:
-                continue
-			self.Task_launched=True	
+		#资源检查	
+		if cpus < TASK_CPU or mem < TASK_MEM:
+			continue
+		self.Task_launched=True	
 
-			#设置docker信息
-			DockerInfo = Dict()
-			DockerInfo.image = 'mydocker:v4'
-			DockerInfo.network = 'HOST'
-	
-			#设置容器信息
-			ContainerInfo = Dict()
-			ContainerInfo.type = 'DOCKER'
-			ContainerInfo.docker = DockerInfo
-			
-			#设置命令
-			CommandInfo = Dict()
-			CommandInfo.shell = False
-			CommandInfo.value = '/bin/bash'
-			CommandInfo.arguments = ['/run.sh']
-			
-			#创建task
-            task = Dict()
-            task_id = str(uuid.uuid4())
-            task.task_id.value = task_id
-            task.agent_id.value = offer.agent_id.value
-            task.name = 'mydocker'
-			
-			#将命令和容器加入task
-			task.container = ContainerInfo
-			task.command = CommandInfo
+		#设置docker信息
+		DockerInfo = Dict()
+		DockerInfo.image = 'mydocker:v4'
+		DockerInfo.network = 'HOST'
 
-            task.resources = [
-                dict(name='cpus', type='SCALAR', scalar={'value': TASK_CPU}),
-                dict(name='mem', type='SCALAR', scalar={'value': TASK_MEM}),
-            ]
+		#设置容器信息
+		ContainerInfo = Dict()
+		ContainerInfo.type = 'DOCKER'
+		ContainerInfo.docker = DockerInfo
+			
+		#设置命令
+		CommandInfo = Dict()
+		CommandInfo.shell = False
+		CommandInfo.value = '/bin/bash'
+		CommandInfo.arguments = ['/run.sh']
+			
+		#创建task
+		task = Dict()
+		task_id = str(uuid.uuid4())
+		task.task_id.value = task_id
+		task.agent_id.value = offer.agent_id.value
+		task.name = 'mydocker'
+			
+		#将命令和容器加入task
+		task.container = ContainerInfo
+		task.command = CommandInfo
 
-            driver.launchTasks(offer.id, [task], filters) #调度任务
+		task.resources = [
+              	  dict(name='cpus', type='SCALAR', scalar={'value': TASK_CPU}),
+           	     dict(name='mem', type='SCALAR', scalar={'value': TASK_MEM}),
+        	    ]
+		
+		driver.launchTasks(offer.id, [task], filters) #调度任务
 
     #状态更新回调
     def statusUpdate(self, driver, update):

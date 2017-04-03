@@ -33,25 +33,25 @@ class MinimalScheduler(Scheduler):
         filters = {'refuse_seconds': 5}
         #分发任务
         for offer in offers:
-            cpus = self.getResource(offer.resources, 'cpus')
-            mem = self.getResource(offer.resources, 'mem')
-            if self.Task_launched:
+			cpus = self.getResource(offer.resources, 'cpus')
+			mem = self.getResource(offer.resources, 'mem')
+			if self.Task_launched:
                 continue
-            if cpus < TASK_CPU or mem < TASK_MEM:
+			if cpus < TASK_CPU or mem < TASK_MEM:
                 continue
-	    self.Task_launched=True			
-	    DockerInfo = Dict()
-	    DockerInfo.image = 'mydocker:v4'
-	    DockerInfo.network = 'HOST'
+			self.Task_launched=True			
+			DockerInfo = Dict()
+			DockerInfo.image = 'mydocker:v4'
+			DockerInfo.network = 'HOST'
 
-	    ContainerInfo = Dict()
-	    ContainerInfo.type = 'DOCKER'
-	    ContainerInfo.docker = DockerInfo
+			ContainerInfo = Dict()
+			ContainerInfo.type = 'DOCKER'
+			ContainerInfo.docker = DockerInfo
 
-	    CommandInfo = Dict()
-	    CommandInfo.shell = False
-	    CommandInfo.value = '/bin/bash'
-	    CommandInfo.arguments = ['/run.sh']
+			CommandInfo = Dict()
+			CommandInfo.shell = False
+			CommandInfo.value = '/bin/bash'
+			CommandInfo.arguments = ['/run.sh']
 			
 			
             task = Dict()
@@ -59,8 +59,8 @@ class MinimalScheduler(Scheduler):
             task.task_id.value = task_id
             task.agent_id.value = offer.agent_id.value
             task.name = 'mydocker'
-	    task.container = ContainerInfo
-	    task.command = CommandInfo
+			task.container = ContainerInfo
+			task.command = CommandInfo
 
             task.resources = [
                 dict(name='cpus', type='SCALAR', scalar={'value': TASK_CPU}),
