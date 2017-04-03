@@ -330,9 +330,9 @@ docker network disconnect bridge mydocker
 docker network connect mynet mydocker
 ```
 * 此时网页正常打开
-* 宿主访问
+* 获得网关信息
 ```
-docker network inspect mynet //获得网关信息
+docker network inspect mynet
 {
         "Name": "mynet",
         "Id": "f9c6122e1d8066eab52e8caf76f0f1da9c30b8c0f5126ddc2115183e934e8442",
