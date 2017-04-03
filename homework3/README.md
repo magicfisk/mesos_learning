@@ -1,6 +1,6 @@
 # 第三次作业
 ## 1.安装docker
-![pic1](https://github.com/magicfisk/mesos_learning/tree/master/homework3/install.jpg)
+![pic1](https://github.com/magicfisk/mesos_learning/raw/master/homework3/install.jpg)
 ## docker基本命令
 ### docker run
 * 语法
@@ -314,7 +314,7 @@ docker run -it --net=host mydocker:v4 /bin/bash /run.sh
 ```
 * 在燕云上将80端口转发到8888端口上
 * 输入http://162.105.174.33:8888/ 看到网页
-![pic2](https://github.com/magicfisk/mesos_learning/tree/master/homework3/index.jpg)
+![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework3/index.jpg)
 * 创建自己的网络,默认为bridge
 ```
 docker network create mynet
@@ -539,9 +539,9 @@ class MinimalScheduler(Scheduler):
 python scheduler.py 172.16.6.153
 ```
 * 可以看到agent在运行
-![pic3](https://github.com/magicfisk/mesos_learning/tree/master/homework3/agent.jpg)
+![pic3](https://github.com/magicfisk/mesos_learning/raw/master/homework3/agent.jpg)
 * docker运行
-![pic4](https://github.com/magicfisk/mesos_learning/tree/master/homework3/docker.jpg)
+![pic4](https://github.com/magicfisk/mesos_learning/raw/master/homework3/docker.jpg)
 * 网页正常访问
-![pic2](https://github.com/magicfisk/mesos_learning/tree/master/homework3/index.jpg)
+![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework3/index.jpg)
 
