@@ -408,6 +408,40 @@ ID                           HOSTNAME  STATUS  AVAILABILITY  MANAGER STATUS
 ```
 ## 阅读mesos中负责与docker交互的代码，谈谈mesos是怎样与docker进行交互的，并介绍docker类中run函数大致做了什么。
 
+
+### docker run
+* 检查containnerInfo是否存在
+* 开始构建命令参数
+```
+  vector<string> argv;
+  argv.push_back(path);
+  argv.push_back("-H");
+  argv.push_back(socket);
+  argv.push_back("run");
+
+  if (dockerInfo.privileged()) {
+    argv.push_back("--privileged");
+  }
+```
+* 检查资源信息，并设定对应参数
+* 检查环境变量，并设定命令参数（代码不贴了）
+* 加入mesos sandbox相关参数
+* 检查挂载信息，并设定命令参数
+* 将sandbox的目录加入容器中，通过挂载的方式
+* 检查分卷（volume）？驱动的个数，mesos只支持一个（还是docker？）
+* 加入网络信息
+* 加入hostname
+* 加入docker的option信息
+* 加入端口映射
+* 加入硬盘信息
+* 加入命令行参数
+* 加入容器名字
+* 参数构建完毕，写入日志
+* 设置子线程系统环境变量
+* 新建子线程实体
+* 运行子线程
+
+
 ## 写一个framework，以容器的方式运行task，运行前面保存的nginx服务器镜像，网络为HOST。
 * 重启agent进程，加入选项--containerizers=docker,mesos
 * 在pymesos上修改代码
