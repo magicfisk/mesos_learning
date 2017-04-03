@@ -440,51 +440,51 @@ class MinimalScheduler(Scheduler):
         filters = {'refuse_seconds': 5}
         #分发任务
         for offer in offers:
-            cpus = self.getResource(offer.resources, 'cpus')
-            mem = self.getResource(offer.resources, 'mem')
+		cpus = self.getResource(offer.resources, 'cpus')
+		mem = self.getResource(offer.resources, 'mem')
 			
-			#只运行一个
-            if self.Task_launched:
-                continue
+		#只运行一个
+		if self.Task_launched:
+		continue
 				
-			#资源检查	
-            if cpus < TASK_CPU or mem < TASK_MEM:
-                continue
-			self.Task_launched=True	
+		#资源检查	
+		if cpus < TASK_CPU or mem < TASK_MEM:
+			continue
+		self.Task_launched=True	
 
-			#设置docker信息
-			DockerInfo = Dict()
-			DockerInfo.image = 'mydocker:v4'
-			DockerInfo.network = 'HOST'
-	
-			#设置容器信息
-			ContainerInfo = Dict()
-			ContainerInfo.type = 'DOCKER'
-			ContainerInfo.docker = DockerInfo
-			
-			#设置命令
-			CommandInfo = Dict()
-			CommandInfo.shell = False
-			CommandInfo.value = '/bin/bash'
-			CommandInfo.arguments = ['/run.sh']
-			
-			#创建task
-            task = Dict()
-            task_id = str(uuid.uuid4())
-            task.task_id.value = task_id
-            task.agent_id.value = offer.agent_id.value
-            task.name = 'mydocker'
-			
-			#将命令和容器加入task
-			task.container = ContainerInfo
-			task.command = CommandInfo
+		#设置docker信息
+		DockerInfo = Dict()
+		DockerInfo.image = 'mydocker:v4'
+		DockerInfo.network = 'HOST'
 
-            task.resources = [
-                dict(name='cpus', type='SCALAR', scalar={'value': TASK_CPU}),
-                dict(name='mem', type='SCALAR', scalar={'value': TASK_MEM}),
-            ]
+		#设置容器信息
+		ContainerInfo = Dict()
+		ContainerInfo.type = 'DOCKER'
+		ContainerInfo.docker = DockerInfo
+			
+		#设置命令
+		CommandInfo = Dict()
+		CommandInfo.shell = False
+		CommandInfo.value = '/bin/bash'
+		CommandInfo.arguments = ['/run.sh']
+			
+		#创建task
+		task = Dict()
+		task_id = str(uuid.uuid4())
+		task.task_id.value = task_id
+		task.agent_id.value = offer.agent_id.value
+		task.name = 'mydocker'
+			
+		#将命令和容器加入task
+		task.container = ContainerInfo
+		task.command = CommandInfo
 
-            driver.launchTasks(offer.id, [task], filters) #调度任务
+		task.resources = [
+              	  dict(name='cpus', type='SCALAR', scalar={'value': TASK_CPU}),
+           	     dict(name='mem', type='SCALAR', scalar={'value': TASK_MEM}),
+        	    ]
+		
+		driver.launchTasks(offer.id, [task], filters) #调度任务
 
     #状态更新回调
     def statusUpdate(self, driver, update):
