@@ -87,8 +87,8 @@ spark.master	mesos://127.0.0.1:5050
 * 时间分别如下<br>
 ![time-cpu-1](https://github.com/magicfisk/mesos_learning/blob/master/homework1/time-cpu-1.png)<br>
 ![time-cpu-2](https://github.com/magicfisk/mesos_learning/blob/master/homework1/time-cpu-2.png)<br>
-![time-cpu-4](https://github.com/magicfisk/mesos_learning/blob/master/homework1/time-cpu-4.png)<br>
-
+![time-cpu-4](https://github.com/magicfisk/mesos_learning/blob/master/homework1/time-cpu-4.png)<br>* *
+* 1、2、4个core的时间分别为6.51s，5.8s，6.5s
 * 资源显示如下<br>
 ![cpu-1](https://github.com/magicfisk/mesos_learning/blob/master/homework1/cpu-1.jpg)<br>
 ![cpu-2](https://github.com/magicfisk/mesos_learning/blob/master/homework1/cpu-2.jpg)<br>
