@@ -81,14 +81,8 @@ GlusterFS采用弹性哈希算法在存储池中定位数据,而不是采用集中式或分布式元数据服务器
 * 见下面配置
 
 ## 联合文件系统
-### AUFS概览
-* AUFS是一种Union File System,所谓UnionFS就是把不同物理位置的目录合并mount到同一个目录中。
-```
-sudo mount -t aufs -o br=/a:/b:/c none /aufs
-```
-* 上述命令可以把a,b,c挂载到aufs文件夹下,其中c为最上层,a为最下层
 ### AUFS概念
-* 将多个目录合并成一个虚拟文件系统,成员目录称为虚拟文件系统的一个分支（branch）
+* AUFS是一种Union File System，将多个目录合并成一个虚拟文件系统,成员目录称为虚拟文件系统的一个分支（branch）
 * 每个branch可以指定 readwrite/whiteout‐able/readonly权限,只读（ro）,读写（rw）,写隐藏（wo）。
 * 一般情况下,aufs只有最上层的branch具有读写权限,其余branch均为只读权限。只读branch只能逻辑上修改。
 ### AUFS读写
@@ -102,12 +96,161 @@ sudo mount -t aufs -o br=/a:/b:/c none /aufs
 * 在运行容器的时候,创建一个AUFS branch位于image层之上,具有rw权限,并把这些branch联合挂载到一个挂载点下。
 * 创建多个容器时,只需创建多个容器运行目录,使用aufs把容器运行目录挂载在Image目录之上,大大节约了资源
 ### 使用方式
+```
+sudo mount -t aufs -o br=/a:/b:/c none /aufs
+```
+* 上述命令可以把a,b,c挂载到aufs文件夹下,其中a为最上层,c为最下层
+## 安装配置GlusterFS
+### 安装
+```
+sudo apt-get install -y software-properties-common
+sudo add-apt-repository ppa:gluster/glusterfs-3.8
+sudo apt-get update
+sudo apt-get install -y glusterfs-server
+```
+* 上述命令安装了服务端
+```
+apt-get install -y glusterfs-client
+```
+* 安装客户端
+### 启动
+```
+sudo service glusterfs-server start
+```
+* 启动服务
+```
+sudo service glusterfs-server status
 
-## 安装
+● glusterfs-server.service - LSB: GlusterFS server
+   Loaded: loaded (/etc/init.d/glusterfs-server; bad; vendor preset: enabled)
+   Active: active (running) since Sat 2017-04-15 16:30:30 EDT; 2 days ago
+     Docs: man:systemd-sysv-generator(8)
+  Process: 11880 ExecStop=/etc/init.d/glusterfs-server stop (code=exited, statu
+  Process: 12232 ExecStart=/etc/init.d/glusterfs-server start (code=exited, sta
+    Tasks: 34
+   Memory: 83.0M
+      CPU: 41.507s
+   CGroup: /system.slice/glusterfs-server.service
+           ├─11512 /usr/sbin/glusterfsd -s 172.16.6.153 --volfile-id gvol0.172.
+           ├─12239 /usr/sbin/glusterd -p /var/run/glusterd.pid
+           └─12473 /usr/sbin/glusterfs -s localhost --volfile-id gluster/gluste
+
+Apr 15 16:30:28 oo-lab systemd[1]: Starting LSB: GlusterFS server...
+Apr 15 16:30:28 oo-lab glusterfs-server[12232]:  * Starting glusterd service gl
+Apr 15 16:30:30 oo-lab glusterfs-server[12232]:    ...done.
+Apr 15 16:30:30 oo-lab systemd[1]: Started LSB: GlusterFS server.
+```
+* 确认服务启动
+### 添加信任的服务端
+```
+gluster peer probe 172.16.6.153
+
+gluster pool list   //查看存储列表
+UUID                                    Hostname        State
+3a362a72-95ef-44e3-8f34-5af9c00767b3    172.16.6.153    Connected
+d44f85da-69fd-499a-8b50-f009a078e99e    localhost       Connected
+
+```
+
+### 创建volume，挂载
+```
+mkdir -p /data/gluster/gvol0
 gluster volume create gvol0 replica 2 172.16.6.249:/data/gluster/gvol0 172.16.6.153:/data/gluster/gvol0 force
-
+gluster volume start gvol0 //启动卷
+```
+* 将/data/gluster/gvol0作为brick，在任意一台机器上运行第二条命令，创建一个复制卷
+```
 mount -t glusterfs 172.16.6.249:/gvol0 /mnt/glusterfs
-mount -t glusterfs 172.16.6.153:/gvol0 /mnt/glusterfs
+```
+* 将创建的目录挂载在本地的/mnt/glusterfs目录下
 
+### 测试
+* 在/mnt/glusterfs下
+```
+vi index.html //写入一个主页
+```
+* 在服务器上查看文件存入
+```
+root@oo-lab:/data/gluster/gvol0# ls
+index.html
+```
+* 破坏一个服务器上的文件夹
+```
+Broadcast message from systemd-journald@oo-lab (Mon 2017-04-17 21:33:54 EDT):
 
+data-gluster-gvol0[33275]: [2017-04-18 01:33:54.693674] M [MSGID: 113075] [posix-helpers.c:1821:posix_health_check_thread_proc] 0-gvol0-posix: health-check failed, going down
+```
+* 文件依旧能在挂载点看到
+```
+root@oo-lab:/mnt/glusterfs# ls
+index.html
+```
+
+### 在docker中挂载上述分布式系统
+* 由于docker中无法直接将volume挂载，所以选择将volume先挂载在宿主上,再挂入docker
+```
 docker run -it --net=host -v /mnt/glusterfs/:/home/ mydocker:v1 /bin/bash ./run.sh
+```
+* 在其他挂载地点修改index文件，刷新网页，可以发现网页被修改，说明成功载入分布式文件系统
+@ 图片
+
+## 仿照Docker镜像工作机制完成一次镜像制作
+* docker和aufs在上面部分已经阐述了其关系
+### 查看docker的挂载文件位置
+```
+docker run -it --name tst ubuntu
+exit
+docker start tst
+df -h
+```
+* 开启一个docker，使得在后台运行,并查看挂载
+```
+none                           19G   13G  5.2G  71% /var/lib/docker/aufs/mnt/12c918da5e9fec89c325ad67d19932d108af18f3349ee047941fb4c8c76fb3b1
+
+shm                            64M     0   64M   0% /var/lib/docker/containers/8e8d2a1b74b1945ddd9ad5983dd9ab58a0beb5844873d734ef07849dea23244a/shm
+```
+* 多了2行，其中none为docker镜像的挂载，shm为docker的配置文件
+* 在/var/lib/docker/aufs/layers可以看到layers信息
+```
+cat 12c918da5e9fec89c325ad67d19932d108af18f3349ee047941fb4c8c76fb3b1
+
+12c918da5e9fec89c325ad67d19932d108af18f3349ee047941fb4c8c76fb3b1-init
+ab222f2619b921e9fb847be0bbff321728ad9771c92b64c3c80a4fe544ecfecf
+d1cbd4588f47064a894634352814687466491c80af12e84743de30977bf3b712
+6dd88e0bdb25db5f73166f3448e66c13ae2c4ca4b1e6461defa11da9b5085ff6
+d4a4666fac88e2ea29315327d19e471f536bb9bfd843888723fca3f2b3ea8359
+70c35b47cf4fd87c4558d11b772aa60a97b0ac4bba862860f5820c006dfe314c
+```
+* 可以看到顶层为12c918da5e9fec89c325ad67d19932d108af18f3349ee047941fb4c8c76fb3b1-init
+* 容器的层数据存放在/var/lib/docker/aufs/diff目录
+* 事实上12c918da5e9fec89c325ad67d19932d108af18f3349ee047941fb4c8c76fb3b1才是读写层，带init的是用来初始化的
+```
+cp ab222f2619b921e9fb847be0bbff321728ad9771c92b64c3c80a4fe544ecfecf /my_img/i2 -r
+cp d1cbd4588f47064a894634352814687466491c80af12e84743de30977bf3b712 /my_img/i3 -r
+cp 6dd88e0bdb25db5f73166f3448e66c13ae2c4ca4b1e6461defa11da9b5085ff6 /my_img/i4 -r
+cp d4a4666fac88e2ea29315327d19e471f536bb9bfd843888723fca3f2b3ea8359 /my_img/i5 -r
+cp 70c35b47cf4fd87c4558d11b772aa60a97b0ac4bba862860f5820c006dfe314c /my_img/i6 -r
+```
+* 把数据全部复制出来
+* 安装vim包，复制软件安装层
+```
+docker exec -it tst /bin/bash
+apt-get update
+apt install vim -y
+cd /var/lib/docker/aufs/diff
+cp 12c918da5e9fec89c325ad67d19932d108af18f3349ee047941fb4c8c76fb3b1 /my_img/i1 -r
+```
+* 并全部挂载在一个目录下面
+```
+mkdir /mydocker_mnt
+mount -t aufs -o br=/my_img/i1=ro:/my_img/i2=ro:/my_img/i3=ro:/my_img/i4=ro:/my_img/i5=ro:/my_img/i6=ro none /mydocker_mnt
+```
+* 利用import命令从tar包中获取镜像,进入镜像
+```
+tar -c . | docker import - mydocker_new:v3
+docker run -it mydocker_new:v3 /bin/bash
+vi 1.txt
+```
+* 成功运行vim
+@ 图片
+
