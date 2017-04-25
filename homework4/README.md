@@ -235,11 +235,12 @@ cp 70c35b47cf4fd87c4558d11b772aa60a97b0ac4bba862860f5820c006dfe314c /my_img/i6 -
 * 把数据全部复制出来
 * 安装vim包，复制软件安装层
 ```
-docker exec -it tst /bin/bash
-apt-get update
-apt install vim -y
-cd /var/lib/docker/aufs/diff
-cp 12c918da5e9fec89c325ad67d19932d108af18f3349ee047941fb4c8c76fb3b1 /my_img/i1 -r
+root@docker exec -it tst /bin/bash
+docker@apt-get update
+docker@apt install vim -y
+docker@exit
+root@cd /var/lib/docker/aufs/diff
+root@cp 12c918da5e9fec89c325ad67d19932d108af18f3349ee047941fb4c8c76fb3b1 /my_img/i1 -r
 ```
 * 并全部挂载在一个目录下面
 ```
