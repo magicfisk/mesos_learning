@@ -197,19 +197,20 @@ docker run -it --net=host -v /mnt/glusterfs/:/home/ mydocker:v1 /bin/bash ./run.
 ## 仿照Docker镜像工作机制完成一次镜像制作
 * docker和aufs在上面部分已经阐述了其关系
 ### 查看docker的挂载文件位置
+* 开启一个docker，使得在后台运行,并查看挂载
 ```
 docker run -it --name tst ubuntu
 exit
 docker start tst
 df -h
 ```
-* 开启一个docker，使得在后台运行,并查看挂载
+* 多了2行，其中none为docker镜像的挂载，shm为docker的配置文件
 ```
 none                           19G   13G  5.2G  71% /var/lib/docker/aufs/mnt/12c918da5e9fec89c325ad67d19932d108af18f3349ee047941fb4c8c76fb3b1
 
 shm                            64M     0   64M   0% /var/lib/docker/containers/8e8d2a1b74b1945ddd9ad5983dd9ab58a0beb5844873d734ef07849dea23244a/shm
 ```
-* 多了2行，其中none为docker镜像的挂载，shm为docker的配置文件
+
 * 在/var/lib/docker/aufs/layers可以看到layers信息
 ```
 cat 12c918da5e9fec89c325ad67d19932d108af18f3349ee047941fb4c8c76fb3b1
