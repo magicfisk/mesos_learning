@@ -18,7 +18,7 @@
 * 周期性将元数据节点的命名空间镜像文件和修改日志合并,以防日志文件过大
 * 合并后的命名空间镜像文件在从元数据节点中叶保存一份,以防元数据节点失效的时候用于恢复。
 ### HDFS构架
-@ 插入图片
+![pic1](https://github.com/magicfisk/mesos_learning/raw/master/homework4/HDFS-A.gif)
 * HDFS采用master/slave架构,有一个Namenode和一定数目的Datanode组成
 * Namenode是一个中心服务器,负责管理文件系统的namespace和客户端对文件的访问（只有一个！！）
 * Datanode在集群中一般是一个节点一个,负责管理节点上它们附带的存储
@@ -49,7 +49,7 @@ bin/hadoop fs <args>
 ### 亮点
 GlusterFS采用弹性哈希算法在存储池中定位数据,而不是采用集中式或分布式元数据服务器索引。在其他的Scale-Out存储系统中,元数据服务器通常会导致I/O性能瓶颈和单点故障问题。GlusterFS中,所有在Scale-Out存储配置中的存储系统都可以智能地定位任意数据分片,不需要查看索引或者向其他服务器查询。这种设计机制完全并行化了数据访问,实现了真正的线性性能扩展。
 ### 框架
-@ 图片
+![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework4/GlusterFS_inside.png)
 #### 外部结构
 * 由存储服务器（BrickServer）、客户端以及NFS/Samba 存储网关组成
 * GlusterFS 架构中没有元数据服务器组件
@@ -192,7 +192,7 @@ index.html
 docker run -it --net=host -v /mnt/glusterfs/:/home/ mydocker:v1 /bin/bash ./run.sh
 ```
 * 在其他挂载地点修改index文件，刷新网页，可以发现网页被修改，说明成功载入分布式文件系统
-@ 图片
+![pic3](https://github.com/magicfisk/mesos_learning/raw/master/homework4/index.jpg)
 
 ## 仿照Docker镜像工作机制完成一次镜像制作
 * docker和aufs在上面部分已经阐述了其关系
@@ -252,5 +252,5 @@ docker run -it mydocker_new:v3 /bin/bash
 vi 1.txt
 ```
 * 成功运行vim
-@ 图片
+![pic4](https://github.com/magicfisk/mesos_learning/raw/master/homework4/vi.jpg)
 
