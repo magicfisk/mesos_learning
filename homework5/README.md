@@ -144,10 +144,22 @@ iptables -A INPUT -s 172.16.6.249 -p icmp --icmp-type 8 -j ACCEPT
 ![pic5](https://github.com/magicfisk/mesos_learning/raw/master/homework5/docker-calico-network.png)
 * 当容器创建时，calico为容器生成veth pair，一端作为容器网卡加入到容器的网络命名空间，并设置IP和掩码，一端直接暴露在宿主机上，并通过设置路由规则，将容器IP暴露到宿主机的通信路由上。于此同时，calico为每个主机分配了一段子网作为容器可分配的IP范围，这样就可以根据子网的CIDR为每个主机生成比较固定的路由规则。
 * 当容器需要跨主机通信时，主要经过下面的简单步骤：
-* 1.容器流量通过veth pair到达宿主机的网络命名空间上。
-* 2.根据容器要访问的IP所在的子网CIDR和主机上的路由规则，找到下一跳要到达的宿主机IP。
-* 3.流量到达下一跳的宿主机后，根据当前宿主机上的路由规则，直接到达对端容器的veth pair插在宿主机的一端，最终进入容器。
-* 从上面的通信过程来看，跨主机通信时，整个通信路径完全没有使用NAT或者UDP封装，性能上的损耗确实比较低。但正式由于calico的通信机制是完全基于三层的，这种机制也带来了一些缺陷，例如：
-* calico目前只支持TCP、UDP、ICMP、ICMPv6协议，如果使用其他四层协议（例如NetBIOS协议），建议使用weave、原生overlay等其他overlay网络实现。
-* 基于三层实现通信，在二层上没有任何加密包装，因此只能在私有的可靠网络上使用。
-* 流量隔离基于iptables实现，并且从etcd中获取需要生成的隔离规则，有一些性能上的隐患。
+<li> 1.容器流量通过veth pair到达宿主机的网络命名空间上。</li>
+<li> 2.根据容器要访问的IP所在的子网CIDR和主机上的路由规则，找到下一跳要到达的宿主机IP。</li>
+<li> 3.流量到达下一跳的宿主机后，根据当前宿主机上的路由规则，直接到达对端容器的veth pair插在宿主机的一端，最终进入容器。</li>
+## 调研除calico以外的任意一种容器网络方案，比较其与calico的优缺点。
+* weave通过在docker集群的每个主机上启动虚拟的路由器，将主机作为路由器，形成互联互通的网络拓扑，在此基础上，实现容器的跨主机通信。
+![pic6](https://github.com/magicfisk/mesos_learning/raw/master/homework5/weave-host-topology.png)
+* 如上图所示，在每一个部署Docker的主机（可能是物理机也可能是虚拟机）上都部署有一个W（即weave router，它本身也可以以一个容器的形式部署）。weave网络是由这些weave routers组成的对等端点（peer）构成，并且可以通过weave命令行定制网络拓扑。
+* 当容器通过weave进行跨主机通信时，其网络通信模型可以参考下图：
+![pic6](https://github.com/magicfisk/mesos_learning/raw/master/homework5/docker-weave-network.png)
+* 对每一个weave网络中的容器，weave都会创建一个网桥，并且在网桥和每个容器之间创建一个veth pair，一端作为容器网卡加入到容器的网络命名空间中，并为容器网卡配置ip和相应的掩码，一端连接在网桥上，最终通过宿主机上weave router将流量转发到对端主机上。
+* 基本流程：
+* 容器流量通过veth pair到达宿主机上weave router网桥上。
+* weave router在混杂模式下使用pcap在网桥上截获网络数据包，并排除由内核直接通过网桥转发的数据流量，例如本子网内部、本地容器之间的数据以及宿主机和本地容器之间的流量。捕获的包通过UDP转发到所其他主机的weave router端。
+* 在接收端，weave router通过pcap将包注入到网桥上的接口，通过网桥的上的veth pair，将流量分发到容器的网卡上。
+### calico和weave的比较
+#### weave
+* 优点：weave默认基于UDP承载容器之间的数据包，并且可以完全自定义整个集群的网络拓扑，比较灵活
+* 缺点：
+weave自定义容器数据包的封包解包方式，不够通用，传输效率比较低，性能上的损失也比较大。
