@@ -144,9 +144,9 @@ iptables -A INPUT -s 172.16.6.249 -p icmp --icmp-type 8 -j ACCEPT
 ![pic5](https://github.com/magicfisk/mesos_learning/raw/master/homework5/docker-calico-network.png)
 * 当容器创建时，calico为容器生成veth pair，一端作为容器网卡加入到容器的网络命名空间，并设置IP和掩码，一端直接暴露在宿主机上，并通过设置路由规则，将容器IP暴露到宿主机的通信路由上。于此同时，calico为每个主机分配了一段子网作为容器可分配的IP范围，这样就可以根据子网的CIDR为每个主机生成比较固定的路由规则。
 * 当容器需要跨主机通信时，主要经过下面的简单步骤：
-<p> 1.容器流量通过veth pair到达宿主机的网络命名空间上。</p>
-<p> 2.根据容器要访问的IP所在的子网CIDR和主机上的路由规则，找到下一跳要到达的宿主机IP。</p>
-<p> 3.流量到达下一跳的宿主机后，根据当前宿主机上的路由规则，直接到达对端容器的veth pair插在宿主机的一端，最终进入容器。</p>
+	1.容器流量通过veth pair到达宿主机的网络命名空间上。
+	2.根据容器要访问的IP所在的子网CIDR和主机上的路由规则，找到下一跳要到达的宿主机IP。
+	3.流量到达下一跳的宿主机后，根据当前宿主机上的路由规则，直接到达对端容器的veth pair插在宿主机的一端，最终进入容器。
 ## 调研除calico以外的任意一种容器网络方案，比较其与calico的优缺点。
 * weave通过在docker集群的每个主机上启动虚拟的路由器，将主机作为路由器，形成互联互通的网络拓扑，在此基础上，实现容器的跨主机通信。
 ![pic6](https://github.com/magicfisk/mesos_learning/raw/master/homework5/weave-host-topology.png)
