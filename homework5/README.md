@@ -71,11 +71,8 @@ iptables -D INPUT 2
      NEW        ：想要新建立联机的封包状态；
      RELATED    ：这个最常用！表示这个封包是与我们主机发送出去的封包有关
 ```
-* 命令
-```
-iptables -A INPUT -p all -m mac --mac-source 02:00:34:91:00:05 -j REJECT
-```
 * 获取一台同局域网的mac地址02:00:2b:40:00:01
+* 命令
 ```
 iptables -A INPUT -p all -m mac --mac-source 02:00:2b:40:00:01 -j REJECT
 ```
