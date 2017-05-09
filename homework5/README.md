@@ -382,5 +382,5 @@ nohup configurable-http-proxy --default-target=http://192.0.1.100:8888 --ip=172.
 * 第二步转发可以手工确定
 * 也可以在pymesos中通过事先设定的ip表，在运行task1时自动转发
 * 暂时通过手工转发
-@ 图片
+![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework5/jpt.jpg)
 * 成功在外网登上jupyter notebook
