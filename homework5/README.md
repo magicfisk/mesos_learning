@@ -290,7 +290,7 @@ CMD ["jupyter","notebook","--NotebookApp.token=","--ip=0.0.0.0", "--port=8888"]
 docker build -t jp_docker/ssh_docker .
 ```
 * 来在各个服务器上生成镜像
-#### mesos
+### mesos
 * 编写一个pymesos来调度docker
 ```
 		if self.Task_launched==1 :
@@ -366,3 +366,21 @@ docker build -t jp_docker/ssh_docker .
 		driver.launchTasks(offer.id, [task], filters) #调度任务
 ```
 * 其中task 1为jupyter_docker，其余的为带ssh的docker
+@ 图片
+### 利用http-proxy转发端口
+* 安装
+```
+apt-get install npm nodejs-legacy
+npm install -g configurable-http-proxy
+```
+* 由于不清楚mesos会在哪台机器上运行，而外部也只能通过某个地址访问某台机器，所以需要多次转发
+* 具体来说jupyter容器转发到宿主机，宿主机转发到公网端口
+* jupyter容器转发到宿主机器可以预先在每个服务器设定
+```
+nohup configurable-http-proxy --default-target=http://192.0.1.100:8888 --ip=172.16.6.153 --port=8888
+```
+* 第二步转发可以手工确定
+* 也可以在pymesos中通过事先设定的ip表，在运行task1时自动转发
+* 暂时通过手工转发
+@ 图片
+* 成功在外网登上jupyter notebook
