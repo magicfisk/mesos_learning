@@ -160,3 +160,209 @@ weave自定义容器数据包的封包解包方式，不够通用，传输效率
 * 缺点1：calico目前只支持TCP、UDP、ICMP、ICMPv6协议，如果使用其他四层协议（例如NetBIOS协议），建议使用weave、原生overlay等其他overlay网络实现。
 * 缺点2：基于三层实现通信，在二层上没有任何加密包装，因此只能在私有的可靠网络上使用。
 * 缺点3：流量隔离基于iptables实现，并且从etcd中获取需要生成的隔离规则，有一些性能上的隐患。
+## 编写一个mesos framework，使用calico容器网络自动搭建一个docker容器集群，并在其中一个容器中部署jupyter notebook。
+### 环境搭建
+
+#### etcd集群环境设置
+```
+p1001:
+etcd --name p1001 --initial-advertise-peer-urls http://172.16.6.153:2380 \
+--listen-peer-urls http://172.16.6.153:2380 \
+--listen-client-urls http://172.16.6.153:2379,http://127.0.0.1:2379 \
+--advertise-client-urls http://172.16.6.153:2379 \
+--initial-cluster-token etcd-cluster-hw5 \
+--initial-cluster p1001=http://172.16.6.153:2380,p1003=http://172.16.6.249:2380 \
+--initial-cluster-state new
+
+p1003:
+etcd --name p1003 --initial-advertise-peer-urls http://172.16.6.249:2380 \
+--listen-peer-urls http://172.16.6.249:2380 \
+--listen-client-urls http://172.16.6.249:2379,http://127.0.0.1:2379 \
+--advertise-client-urls http://172.16.6.249:2379 \
+--initial-cluster-token etcd-cluster-hw5 \
+--initial-cluster p1001=http://172.16.6.153:2380,p1003=http://172.16.6.249:2380 \
+--initial-cluster-state new
+```
+* 检查
+```
+root@oo-lab:~# etcdctl cluster-health
+member 950d9da52f240fc2 is healthy: got healthy result from http://172.16.6.249:2379
+member d4a411c3414cc39d is healthy: got healthy result from http://172.16.6.153:2379
+cluster is healthy
+```
+* ok
+#### 设置Docker daemon
+```
+dockerd --cluster-store etcd://172.16.6.249:2379 &
+dockerd --cluster-store etcd://172.16.6.153:2379 &
+```
+* 注意：docker不能使用swarm mode，docker服务需要关闭，否则都会出错
+#### calico
+* 安装
+```
+sudo wget -O /usr/local/bin/calicoctl https://github.com/projectcalico/calicoctl/releases/download/v1.1.3/calicoctl
+sudo chmod +x /usr/local/bin/calicoctl
+```
+* 启动、检查
+```
+calicoctl node run --ip 172.16.6.249 --name p1003
+calicoctl node status
+alico process is running.
+
+IPv4 BGP status
++--------------+-------------------+-------+----------+-------------+
+| PEER ADDRESS |     PEER TYPE     | STATE |  SINCE   |    INFO     |
++--------------+-------------------+-------+----------+-------------+
+| 172.16.6.249 | node-to-node mesh | up    | 20:04:21 | Established |
++--------------+-------------------+-------+----------+-------------+
+
+IPv6 BGP status
+No IPv6 peers found.
+```
+* 创建ip池
+```
+cat << EOF | calicoctl create -f -
+- apiVersion: v1
+  kind: ipPool
+  metadata:
+    cidr: 192.0.1.0/24
+  spec:
+    nat-outgoing: true
+EOF
+```
+* 创建一个以calico网络驱动的docker网络
+```
+docker network create --driver calico --ipam-driver calico-ipam --subnet=192.0.1.0/24 calico_docker_net
+```
+* 在两台服务器上使用命令
+```
+docker network ls
+都能找到
+2c09bddde08f        calico_docker_net   calico              global
+```
+#### 容器准备
+* 创建一个支持ssh的容器
+```
+# 选择一个已有的os镜像作为基础  
+FROM ubuntu:latest
+
+# 安装ssh
+RUN apt-get update
+RUN apt-get install -y ssh
+   
+# 添加测试用户admin，密码admin，并且将此用户添加到sudoers里  
+RUN useradd admin  
+RUN echo "admin:admin" | chpasswd  
+RUN echo "admin   ALL=(ALL)       ALL" >> /etc/sudoers  
+   
+# 启动sshd服务并且暴露22端口  
+RUN mkdir /var/run/sshd  
+EXPOSE 22  
+CMD ["/usr/sbin/sshd", "-D"]  
+```
+* 创建支持ssh和jupyter的镜像
+```
+# 选择一个已有的os镜像作为基础  
+FROM ubuntu:latest
+
+# 安装ssh
+RUN apt-get update
+RUN apt-get install -y ssh
+
+RUN apt-get install -y python3-pip
+RUN pip3 install jupyter
+   
+# 添加测试用户admin，密码admin，并且将此用户添加到sudoers里  
+RUN useradd admin  
+RUN echo "admin:admin" | chpasswd  
+RUN echo "admin   ALL=(ALL)       ALL" >> /etc/sudoers  
+
+RUN mkdir /var/run/sshd
+
+# 开放22端口并运行jupyter
+EXPOSE 22
+USER admin
+WORKDIR /home/admin
+CMD ["jupyter","notebook","--NotebookApp.token=","--ip=0.0.0.0", "--port=8888"]
+```
+* 利用命令
+```
+docker build -t jp_docker/ssh_docker .
+```
+* 来在各个服务器上生成镜像
+#### mesos
+* 编写一个pymesos来调度docker
+```
+		if self.Task_launched==1 :
+			ip = Dict()
+			ip.key = 'ip'
+			ip.value = '192.0.1.100'
+
+			NetworkInfo = Dict()
+			NetworkInfo.name = 'calico_docker_net'
+
+
+			DockerInfo = Dict()
+			DockerInfo.image = 'jp_docker'
+			DockerInfo.network = 'USER'
+			DockerInfo.parameters = [ip]
+
+
+			ContainerInfo = Dict()
+			ContainerInfo.type = 'DOCKER'
+			ContainerInfo.docker = DockerInfo
+			ContainerInfo.network_infos = [NetworkInfo]
+
+
+			CommandInfo = Dict()
+			CommandInfo.shell = False
+
+			task = Dict()
+			task_id = 'jp'
+			task.task_id.value = task_id
+			task.agent_id.value = offer.agent_id.value
+			task.name = 'jupyter'
+			task.container = ContainerInfo
+			task.command = CommandInfo
+			
+		else :
+			ip = Dict()
+			ip.key = 'ip'
+			ip.value = '192.0.1.100'+str(self.Task_launched)
+
+
+			NetworkInfo = Dict()
+			NetworkInfo.name = 'calico_docker_net'
+
+
+			DockerInfo = Dict()
+			DockerInfo.image = 'ssh_docker'
+			DockerInfo.network = 'USER'
+			DockerInfo.parameters = [ip]
+
+	
+			ContainerInfo = Dict()
+			ContainerInfo.type = 'DOCKER'
+			ContainerInfo.docker = DockerInfo
+			ContainerInfo.network_infos = [NetworkInfo]
+
+
+			CommandInfo = Dict()
+			CommandInfo.shell = False
+
+			task = Dict()
+			task_id = 'ssh'
+			task.task_id.value = task_id
+			task.agent_id.value = offer.agent_id.value
+			task.name = 'ssh'
+			task.container = ContainerInfo
+			task.command = CommandInfo
+
+		task.resources = [
+		dict(name='cpus', type='SCALAR', scalar={'value': TASK_CPU}),
+			dict(name='mem', type='SCALAR', scalar={'value': TASK_MEM}),
+		]
+
+		driver.launchTasks(offer.id, [task], filters) #调度任务
+```
+* 其中task 1为jupyter_docker，其余的为带ssh的docker
