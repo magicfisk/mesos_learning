@@ -1,171 +1,165 @@
-# µÚ5´Î×÷Òµ
-## ¼òÊölinux¶Ôip°üµÄ´¦Àí
+# ç¬¬5æ¬¡ä½œä¸š
+## ç®€è¿°linuxå¯¹ipåŒ…çš„å¤„ç†
 ![pic1](https://github.com/magicfisk/mesos_learning/raw/master/homework5/ip.jpg)
-### ½ÓÊÜip°ü
-* ÈçÍ¼£¬×ó±ßÎªip°ü´ÓÍâÃæ½øÈë£¬½øÈëºóÓÐÒ»¸öÂ·ÓÉ¹ý³Ì£¬ÅÐ¶Ïip°üÊÇ·ñÎª·¢Íù±¾»úµÄip°ü
-* ÈôÊÇ£¬ÔòÍ¨¹ýip_local_inputÁ´Â·£¬½øÈë±¾»ú
-* Èô·ñ£¬ÔòÍ¨¹ýip_forward×ª·¢
-### ·¢ËÍip°ü
-* ÓÒ±ßÎªip°ü·¢³ö£¬ip°ü´Ó¸ß²ãÊäÈë£¬Òª¾­¹ýip_output£¬·â×°¸÷ÖÖip°üÍ·£¬¼ì²émtu¡¢ttlµÈ£¬È»ºó½øÈëip_finish_output,µÈ´ý·¢ËÍ¡£
-* ×ª·¢µÄip°üºÍÖ÷»ú·¢³öµÄip°üÔÚip_finish_output»ãºÏ
-* ÔÙÖ®ºóÍ¨¹ý·¢ËÍÂ·ÓÉ£¬È·¶¨¸Ãip°üÊÇ·ñÊÇ¾ÖÓòÍøÄÚ£¬Í¨¹ýarpÐ­Òé»ñµÃÎïÀíµØÖ·£¨¾ÖÓòÍøÄÚ£©£¬»òÕßÍø¹ØµØÖ·£¨¾ÖÓòÍøÍâ£©
-### ½áºÏiptable
+### æŽ¥å—ipåŒ…
+* å¦‚å›¾ï¼Œå·¦è¾¹ä¸ºipåŒ…ä»Žå¤–é¢è¿›å…¥ï¼Œè¿›å…¥åŽæœ‰ä¸€ä¸ªè·¯ç”±è¿‡ç¨‹ï¼Œåˆ¤æ–­ipåŒ…æ˜¯å¦ä¸ºå‘å¾€æœ¬æœºçš„ipåŒ…
+* è‹¥æ˜¯ï¼Œåˆ™é€šè¿‡ip_local_inputé“¾è·¯ï¼Œè¿›å…¥æœ¬æœº
+* è‹¥å¦ï¼Œåˆ™é€šè¿‡ip_forwardè½¬å‘
+### å‘é€ipåŒ…
+* å³è¾¹ä¸ºipåŒ…å‘å‡ºï¼ŒipåŒ…ä»Žé«˜å±‚è¾“å…¥ï¼Œè¦ç»è¿‡ip_outputï¼Œå°è£…å„ç§ipåŒ…å¤´ï¼Œæ£€æŸ¥mtuã€ttlç­‰ï¼Œç„¶åŽè¿›å…¥ip_finish_output,ç­‰å¾…å‘é€ã€‚
+* è½¬å‘çš„ipåŒ…å’Œä¸»æœºå‘å‡ºçš„ipåŒ…åœ¨ip_finish_outputæ±‡åˆ
+* å†ä¹‹åŽé€šè¿‡å‘é€è·¯ç”±ï¼Œç¡®å®šè¯¥ipåŒ…æ˜¯å¦æ˜¯å±€åŸŸç½‘å†…ï¼Œé€šè¿‡arpåè®®èŽ·å¾—ç‰©ç†åœ°å€ï¼ˆå±€åŸŸç½‘å†…ï¼‰ï¼Œæˆ–è€…ç½‘å…³åœ°å€ï¼ˆå±€åŸŸç½‘å¤–ï¼‰
+### ç»“åˆiptable
 ![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework5/iptables.gif)
-* filter (¹ýÂËÆ÷)£ºÖ÷Òª¸ú½øÈë Linux ±¾»úµÄ·â°üÓÐ¹Ø¡£
-* nat (µØÖ·×ª»»)£ºÊÇ Network Address Translation µÄËõÐ´£¬ Õâ¸ö±í¸ñÖ÷ÒªÔÚ½øÐÐÀ´Ô´ÓëÄ¿µÄÖ® IP »ò port µÄ×ª»»¡£ 
-* mangle (ÆÆ»µÕß)£ºÕâ¸ö±í¸ñÖ÷ÒªÊÇÓëÌØÊâµÄ·â°üµÄÂ·ÓÉÆì±êÓÐ¹Ø£¬ ÔçÆÚ½öÓÐ PREROUTING ¼° OUTPUT Á´£¬²»¹ý´Ó kernel 2.4.18 Ö®ºó¼ÓÈëÁË INPUT ¼° FORWARD Á´
-* iptableÔÚlinuxÄÚºËµÄ¶Ôip°ü´¦ÀíµÄ¸÷¸öÁ´Â·ÉÏ½øÐÐ°ü²Ù×÷
-## Ê¹ÓÃiptable
-* »ù±¾Óï·¨
+* filter (è¿‡æ»¤å™¨)ï¼šä¸»è¦è·Ÿè¿›å…¥ Linux æœ¬æœºçš„å°åŒ…æœ‰å…³ã€‚
+* nat (åœ°å€è½¬æ¢)ï¼šæ˜¯ Network Address Translation çš„ç¼©å†™ï¼Œ è¿™ä¸ªè¡¨æ ¼ä¸»è¦åœ¨è¿›è¡Œæ¥æºä¸Žç›®çš„ä¹‹ IP æˆ– port çš„è½¬æ¢ã€‚ 
+* mangle (ç ´åè€…)ï¼šè¿™ä¸ªè¡¨æ ¼ä¸»è¦æ˜¯ä¸Žç‰¹æ®Šçš„å°åŒ…çš„è·¯ç”±æ——æ ‡æœ‰å…³ï¼Œ æ—©æœŸä»…æœ‰ PREROUTING åŠ OUTPUT é“¾ï¼Œä¸è¿‡ä»Ž kernel 2.4.18 ä¹‹åŽåŠ å…¥äº† INPUT åŠ FORWARD é“¾
+* iptableåœ¨linuxå†…æ ¸çš„å¯¹ipåŒ…å¤„ç†çš„å„ä¸ªé“¾è·¯ä¸Šè¿›è¡ŒåŒ…æ“ä½œ
+## ä½¿ç”¨iptable
+* åŸºæœ¬è¯­æ³•
 ```
-iptables [-AI Á´Ãû] -j [ACCEPT|DROP|REJECT|LOG]
+iptables [-AI é“¾å] -j [ACCEPT|DROP|REJECT|LOG]
 
-»ù±¾Ñ¡ÏîÓë²ÎÊý£º
--AI Á´Ãû£ºÕë¶ÔÄ³µÄÁ´½øÐÐ¹æÔòµÄ "²åÈë" »ò "ÀÛ¼Ó"
-    -A £ºÐÂÔö¼ÓÒ»Ìõ¹æÔò£¬¸Ã¹æÔòÔö¼ÓÔÚÔ­±¾¹æÔòµÄ×îºóÃæ¡£ÀýÈçÔ­±¾ÒÑ¾­ÓÐËÄÌõ¹æÔò£¬
-         Ê¹ÓÃ -A ¾Í¿ÉÒÔ¼ÓÉÏµÚÎåÌõ¹æÔò£¡
-    -I £º²åÈëÒ»Ìõ¹æÔò¡£Èç¹ûÃ»ÓÐÖ¸¶¨´Ë¹æÔòµÄË³Ðò£¬Ä¬ÈÏÊÇ²åÈë±ä³ÉµÚÒ»Ìõ¹æÔò¡£
-         ÀýÈçÔ­±¾ÓÐËÄÌõ¹æÔò£¬Ê¹ÓÃ -I Ôò¸Ã¹æÔò±ä³ÉµÚÒ»Ìõ£¬¶øÔ­±¾ËÄÌõ±ä³É 2~5 ºÅ
-    Á´ £ºÓÐ INPUT, OUTPUT, FORWARD µÈ
+åŸºæœ¬é€‰é¡¹ä¸Žå‚æ•°ï¼š
+-AI é“¾åï¼šé’ˆå¯¹æŸçš„é“¾è¿›è¡Œè§„åˆ™çš„ "æ’å…¥" æˆ– "ç´¯åŠ "
+    -A ï¼šæ–°å¢žåŠ ä¸€æ¡è§„åˆ™ï¼Œè¯¥è§„åˆ™å¢žåŠ åœ¨åŽŸæœ¬è§„åˆ™çš„æœ€åŽé¢ã€‚ä¾‹å¦‚åŽŸæœ¬å·²ç»æœ‰å››æ¡è§„åˆ™ï¼Œ
+         ä½¿ç”¨ -A å°±å¯ä»¥åŠ ä¸Šç¬¬äº”æ¡è§„åˆ™ï¼
+    -I ï¼šæ’å…¥ä¸€æ¡è§„åˆ™ã€‚å¦‚æžœæ²¡æœ‰æŒ‡å®šæ­¤è§„åˆ™çš„é¡ºåºï¼Œé»˜è®¤æ˜¯æ’å…¥å˜æˆç¬¬ä¸€æ¡è§„åˆ™ã€‚
+         ä¾‹å¦‚åŽŸæœ¬æœ‰å››æ¡è§„åˆ™ï¼Œä½¿ç”¨ -I åˆ™è¯¥è§„åˆ™å˜æˆç¬¬ä¸€æ¡ï¼Œè€ŒåŽŸæœ¬å››æ¡å˜æˆ 2~5 å·
+    é“¾ ï¼šæœ‰ INPUT, OUTPUT, FORWARD ç­‰
 
--j £ººóÃæ½Ó¶¯×÷£¬Ö÷ÒªµÄ¶¯×÷ÓÐ½ÓÊÜ(ACCEPT)¡¢¶ªÆú(DROP)¡¢¾Ü¾ø(REJECT)¼°¼ÇÂ¼(LOG)
+-j ï¼šåŽé¢æŽ¥åŠ¨ä½œï¼Œä¸»è¦çš„åŠ¨ä½œæœ‰æŽ¥å—(ACCEPT)ã€ä¸¢å¼ƒ(DROP)ã€æ‹’ç»(REJECT)åŠè®°å½•(LOG)
 
 ```
-* ¹¦ÄÜÐÔ²ÎÊý
+* åŠŸèƒ½æ€§å‚æ•°
 ```
--io ÍøÂç½Ó¿Ú£ºÉè¶¨·â°ü½ø³öµÄ½Ó¿Ú¹æ·¶
-    -i £º·â°üËù½øÈëµÄÄÇ¸öÍøÂç½Ó¿Ú£¬ÀýÈç eth0, lo µÈ½Ó¿Ú¡£ÐèÓë INPUT Á´ÅäºÏ£»
-    -o £º·â°üËù´«³öµÄÄÇ¸öÍøÂç½Ó¿Ú£¬ÐèÓë OUTPUT Á´ÅäºÏ£»
+-io ç½‘ç»œæŽ¥å£ï¼šè®¾å®šå°åŒ…è¿›å‡ºçš„æŽ¥å£è§„èŒƒ
+    -i ï¼šå°åŒ…æ‰€è¿›å…¥çš„é‚£ä¸ªç½‘ç»œæŽ¥å£ï¼Œä¾‹å¦‚ eth0, lo ç­‰æŽ¥å£ã€‚éœ€ä¸Ž INPUT é“¾é…åˆï¼›
+    -o ï¼šå°åŒ…æ‰€ä¼ å‡ºçš„é‚£ä¸ªç½‘ç»œæŽ¥å£ï¼Œéœ€ä¸Ž OUTPUT é“¾é…åˆï¼›
 
--p Ð­¶¨£ºÉè¶¨´Ë¹æÔòÊÊÓÃÓÚÄÄÖÖ·â°ü¸ñÊ½
-   Ö÷ÒªµÄ·â°ü¸ñÊ½ÓÐ£º tcp, udp, icmp ¼° all ¡£
+-p åå®šï¼šè®¾å®šæ­¤è§„åˆ™é€‚ç”¨äºŽå“ªç§å°åŒ…æ ¼å¼
+   ä¸»è¦çš„å°åŒ…æ ¼å¼æœ‰ï¼š tcp, udp, icmp åŠ all ã€‚
 
--s À´Ô´ IP/ÍøÓò£ºÉè¶¨´Ë¹æÔòÖ®·â°üµÄÀ´Ô´ÏîÄ¿£¬¿ÉÖ¸¶¨µ¥´¿µÄ IP »ò°üÀ¨ÍøÓò£¬ÀýÈç£º
-   IP  £º192.168.0.100
-   ÍøÓò£º192.168.0.0/24, 192.168.0.0/255.255.255.0 ¾ù¿É¡£
-   Èô¹æ·¶Îª¡º²»Ðí¡»Ê±£¬Ôò¼ÓÉÏ ! ¼´¿É£¬ÀýÈç£º
-   -s ! 192.168.100.0/24 ±íÊ¾²»Ðí 192.168.100.0/24 Ö®·â°üÀ´Ô´£»
+-s æ¥æº IP/ç½‘åŸŸï¼šè®¾å®šæ­¤è§„åˆ™ä¹‹å°åŒ…çš„æ¥æºé¡¹ç›®ï¼Œå¯æŒ‡å®šå•çº¯çš„ IP æˆ–åŒ…æ‹¬ç½‘åŸŸï¼Œä¾‹å¦‚ï¼š
+   IP  ï¼š192.168.0.100
+   ç½‘åŸŸï¼š192.168.0.0/24, 192.168.0.0/255.255.255.0 å‡å¯ã€‚
+   è‹¥è§„èŒƒä¸ºã€Žä¸è®¸ã€æ—¶ï¼Œåˆ™åŠ ä¸Š ! å³å¯ï¼Œä¾‹å¦‚ï¼š
+   -s ! 192.168.100.0/24 è¡¨ç¤ºä¸è®¸ 192.168.100.0/24 ä¹‹å°åŒ…æ¥æºï¼›
 
--d Ä¿±ê IP/ÍøÓò£ºÍ¬ -s £¬Ö»²»¹ýÕâÀïÖ¸µÄÊÇÄ¿±êµÄ IP »òÍøÓò¡£	 
+-d ç›®æ ‡ IP/ç½‘åŸŸï¼šåŒ -s ï¼Œåªä¸è¿‡è¿™é‡ŒæŒ‡çš„æ˜¯ç›®æ ‡çš„ IP æˆ–ç½‘åŸŸã€‚	 
 ```
-### ¾Ü¾øÄ³ipµÄ·ÃÎÊ
+### æ‹’ç»æŸipçš„è®¿é—®
 ```
 iptables -A INPUT -p all -s 10.2.213.245 -j REJECT
 ```
-* sshÁ¢¿Ì¾Í¶ÏÁË£¬ÐèÒª¸ü»»ipÖØÐÂµÇÈë
-* É¾³ý¹æÔò
+* sshç«‹åˆ»å°±æ–­äº†ï¼Œéœ€è¦æ›´æ¢ipé‡æ–°ç™»å…¥
+* åˆ é™¤è§„åˆ™
 ```
 iptables -D INPUT 2
 ```
-### ¾Ü¾øÀ´×ÔÄ³Ò»ÌØ¶¨macµØÖ·µÄ·ÃÎÊ
-* ²ÎÊý
+### æ‹’ç»æ¥è‡ªæŸä¸€ç‰¹å®šmacåœ°å€çš„è®¿é—®
+* å‚æ•°
 ```
-[-m state] [--state ×´Ì¬]
--m £ºÒ»Ð© iptables µÄÍâ¹ÒÄ£¿é£¬Ö÷Òª³£¼ûµÄÓÐ£º
-     state £º×´Ì¬Ä£¿é
-     mac   £ºÍøÂç¿¨Ó²¼þµØÖ· (hardware address)
+[-m state] [--state çŠ¶æ€]
+-m ï¼šä¸€äº› iptables çš„å¤–æŒ‚æ¨¡å—ï¼Œä¸»è¦å¸¸è§çš„æœ‰ï¼š
+     state ï¼šçŠ¶æ€æ¨¡å—
+     mac   ï¼šç½‘ç»œå¡ç¡¬ä»¶åœ°å€ (hardware address)
 	 
---state £ºÒ»Ð©·â°üµÄ×´Ì¬£¬Ö÷ÒªÓÐ£º
-     INVALID    £ºÎÞÐ§µÄ·â°ü£¬ÀýÈçÊý¾ÝÆÆËðµÄ·â°ü×´Ì¬
-     ESTABLISHED£ºÒÑ¾­Áª»ú³É¹¦µÄÁª»ú×´Ì¬£»
-     NEW        £ºÏëÒªÐÂ½¨Á¢Áª»úµÄ·â°ü×´Ì¬£»
-     RELATED    £ºÕâ¸ö×î³£ÓÃ£¡±íÊ¾Õâ¸ö·â°üÊÇÓëÎÒÃÇÖ÷»ú·¢ËÍ³öÈ¥µÄ·â°üÓÐ¹Ø
+--state ï¼šä¸€äº›å°åŒ…çš„çŠ¶æ€ï¼Œä¸»è¦æœ‰ï¼š
+     INVALID    ï¼šæ— æ•ˆçš„å°åŒ…ï¼Œä¾‹å¦‚æ•°æ®ç ´æŸçš„å°åŒ…çŠ¶æ€
+     ESTABLISHEDï¼šå·²ç»è”æœºæˆåŠŸçš„è”æœºçŠ¶æ€ï¼›
+     NEW        ï¼šæƒ³è¦æ–°å»ºç«‹è”æœºçš„å°åŒ…çŠ¶æ€ï¼›
+     RELATED    ï¼šè¿™ä¸ªæœ€å¸¸ç”¨ï¼è¡¨ç¤ºè¿™ä¸ªå°åŒ…æ˜¯ä¸Žæˆ‘ä»¬ä¸»æœºå‘é€å‡ºåŽ»çš„å°åŒ…æœ‰å…³
 ```
-* ÃüÁî
+* å‘½ä»¤
 ```
 iptables -A INPUT -p all -m mac --mac-source 02:00:34:91:00:05 -j REJECT
 ```
-* Ã»ÓÃT.T
-* ÑÐ¾¿·¢ÏÖÕâÌ¨·þÎñÆ÷Ô­À´¹ÒµôÁË£¬Öú½Ì¸øÖØÆôÁË
-* È»¶øÖú½Ì²¢²»ÊÇÖØÆô£¬ÊÇÍ¼·½±ãÖØÐÂ¸øÁËÒ»Ì¨233
-* Òò´ËÕâÌ¨·þÎñÆ÷ºÍÔ­À´Á½Ì¨²»ÔÚÒ»¸ö¾ÖÓòÍø
-* ·ÃÎÊ·þÎñÆ÷Ê±£¬¾­¹ý¶à¸öÍø¹Ø¡£Í¬Ê±macµØÖ·ÊÇÁ´Â·²ãµÄ£¬¶ø²»ÊôÓÚip²ã£¬ip°üµ½´ïÊ±£¬»ñµÃµÄmacµØÖ·Ó¦¸ÃÊÇÍø¹ØµÄ
-* mac¹ýÂËÖ»¶Ô¾ÖÓòÍøÓÐÐ§£¡£¡
-* »ñÈ¡ÁíÍâÒ»Ì¨Í¬¾ÖÓòÍøµÄmacµØÖ·02:00:2b:40:00:01
+* èŽ·å–ä¸€å°åŒå±€åŸŸç½‘çš„macåœ°å€02:00:2b:40:00:01
 ```
 iptables -A INPUT -p all -m mac --mac-source 02:00:2b:40:00:01 -j REJECT
 ```
-* ³É¹¦£¡ ÎÞ·¨pingÍ¨
-### Ö»¿ª·Å±¾»úµÄhttp·þÎñ£¬ÆäÓàÐ­ÒéÓë¶Ë¿Ú¾ù¾Ü¾ø
-* ²ÎÊý
+* æˆåŠŸï¼ æ— æ³•pingé€š
+### åªå¼€æ”¾æœ¬æœºçš„httpæœåŠ¡ï¼Œå…¶ä½™åè®®ä¸Žç«¯å£å‡æ‹’ç»
+* å‚æ•°
 ```
-[-s À´Ô´IP/ÍøÓò] [--sport ²º¿Ú·¶Î§] [-d Ä¿±êIP/ÍøÓò] [--dport ²º¿Ú·¶Î§]
---sport ²º¿Ú·¶Î§£ºÏÞÖÆÀ´Ô´µÄ¶Ë¿ÚºÅÂë£¬¶Ë¿ÚºÅÂë¿ÉÒÔÊÇÁ¬ÐøµÄ£¬ÀýÈç 1024:65535
---dport ²º¿Ú·¶Î§£ºÏÞÖÆÄ¿±êµÄ¶Ë¿ÚºÅÂë¡£
+[-s æ¥æºIP/ç½‘åŸŸ] [--sport åŸ å£èŒƒå›´] [-d ç›®æ ‡IP/ç½‘åŸŸ] [--dport åŸ å£èŒƒå›´]
+--sport åŸ å£èŒƒå›´ï¼šé™åˆ¶æ¥æºçš„ç«¯å£å·ç ï¼Œç«¯å£å·ç å¯ä»¥æ˜¯è¿žç»­çš„ï¼Œä¾‹å¦‚ 1024:65535
+--dport åŸ å£èŒƒå›´ï¼šé™åˆ¶ç›®æ ‡çš„ç«¯å£å·ç ã€‚
 ```
-* ¶Ë¿ÚµÄ¸ÅÄîÖ»ÔÚtcpºÍudpÐ­ÒéÏÂ´æÔÚ£¬¹ÊÒª¼ÓÉÏ -p tcp/udp Ñ¡Ïî
-* iptable¹æÔò×î×îÔçÆ¥ÅäÉÏµÄ¹æÔò£¬¹ÊÊ¹ÓÃ×éºÏÀ´ÆÁ±ÎºÍ·ÅÐÐ¶Ë¿Ú
-* ÃüÁî
+* ç«¯å£çš„æ¦‚å¿µåªåœ¨tcpå’Œudpåè®®ä¸‹å­˜åœ¨ï¼Œæ•…è¦åŠ ä¸Š -p tcp/udp é€‰é¡¹
+* iptableè§„åˆ™æœ€æœ€æ—©åŒ¹é…ä¸Šçš„è§„åˆ™ï¼Œæ•…ä½¿ç”¨ç»„åˆæ¥å±è”½å’Œæ”¾è¡Œç«¯å£
+* å‘½ä»¤
 ```
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 iptables -A INPUT -p tcp --sport 80 -j ACCEPT
 iptables -A INPUT -p tcp -j DROP
 ```
-### ¾Ü¾ø»ØÓ¦À´×ÔÄ³Ò»ÌØ¶¨IPµØÖ·µÄpingÃüÁî
-* ÃüÁî
+### æ‹’ç»å›žåº”æ¥è‡ªæŸä¸€ç‰¹å®šIPåœ°å€çš„pingå‘½ä»¤
+* å‘½ä»¤
 ```
 iptables -A INPUT -s 172.16.6.249 -p icmp --icmp-type 8 -j ACCEPT
 ```
-* ²âÊÔ³É¹¦
-## ½âÊÍLinuxÍøÂçÉè±¸¹¤×÷Ô­Àí
+* æµ‹è¯•æˆåŠŸ
+## è§£é‡ŠLinuxç½‘ç»œè®¾å¤‡å·¥ä½œåŽŸç†
 ### bridge
-#### ÇÅ½Ó
+#### æ¡¥æŽ¥
 ![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework5/exchange.jpg)
-* ÇÅ½Ó¾ÍÊÇ°ÑÒ»Ì¨»úÆ÷ÉÏµÄÈô¸É¸öÍøÂç½Ó¿ÚÁ¬½ÓÆðÀ´£¬ÏÖÊµÖÐµÄ½»»»»ú¾ÍÊÇÒ»ÖÖÉè±¸£¬ÄÜÁ¬½Ó²»Í¬¾ÖÓòÍø¡£
-* ÈçÍ¼£¬Ã¿Ò»¸ö¶Ë¿ÚÊäÈëµÄ°ü£¬»á±»¸´ÖÆµ½ÆäËû¶Ë¿ÚÊä³ö£¨³õÊ¼£©
-* ÍøÇÅ»á¼ÇÂ¼ÊäÈë°üµÄmacµØÖ·£¬ÔÚÏÂ´ÎÊÕµ½·¢Íù¸ÃmacµÄ°üÊ±£¬Ö±½Ó×ª·¢£¬¶ø²»ÊÇ¹ã²¥
+* æ¡¥æŽ¥å°±æ˜¯æŠŠä¸€å°æœºå™¨ä¸Šçš„è‹¥å¹²ä¸ªç½‘ç»œæŽ¥å£è¿žæŽ¥èµ·æ¥ï¼ŒçŽ°å®žä¸­çš„äº¤æ¢æœºå°±æ˜¯ä¸€ç§è®¾å¤‡ï¼Œèƒ½è¿žæŽ¥ä¸åŒå±€åŸŸç½‘ã€‚
+* å¦‚å›¾ï¼Œæ¯ä¸€ä¸ªç«¯å£è¾“å…¥çš„åŒ…ï¼Œä¼šè¢«å¤åˆ¶åˆ°å…¶ä»–ç«¯å£è¾“å‡ºï¼ˆåˆå§‹ï¼‰
+* ç½‘æ¡¥ä¼šè®°å½•è¾“å…¥åŒ…çš„macåœ°å€ï¼Œåœ¨ä¸‹æ¬¡æ”¶åˆ°å‘å¾€è¯¥macçš„åŒ…æ—¶ï¼Œç›´æŽ¥è½¬å‘ï¼Œè€Œä¸æ˜¯å¹¿æ’­
 #### linux bridge
 ![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework5/bridge.jpg)
-* bridgeµÄ×÷ÓÃÆäÊµÊÇÒ»¸öÐéÄâµÄÍøÇÅ£¬ÆäÐÐÎªºÍ±ê×¼µÄÍøÇÅÓ¦¸ÃÊÇÀàËÆµÄ¡£Á¬½ÓÁË¶à¸öÍø¿¨£¨ÎïÀí»òÕßÐéÄâ£©£¬²¢ÇÒÄÜ½«±¨ÎÄ×ª·¢µ½ÏàÓ¦µÄ³ö¿Ú£¬µ«Ò²ÓÐ²»Í¬µÄµØ·½£ºlinuxÄÚºËµÄ»úÆ÷±¾Éí¾ÍÊÇÒ»Ì¨Ö÷»ú£¬ÓÐ¿ÉÄÜ¾ÍÊÇÍøÂç±¨ÎÄµÄÄ¿µÄµØ¡£ÆäÊÕµ½µÄ±¨ÎÄ³ýÁË×ª·¢ºÍ¶ªÆú£¬»¹¿ÉÄÜ±»ËÍµ½ÍøÂçÐ­ÒéÕ»µÄÉÏ²ã£¨ÍøÂç²ã£©£¬´Ó¶ø±»×Ô¼ºÏû»¯¡£
-* ÈçÍ¼ÍøÇÅÉè±¸br0°ó¶¨ÁËeth0ºÍeth1¡£¶ÔÓÚÍøÂçÐ­ÒéÕ»µÄÉÏ²ãÀ´Ëµ£¬Ö»¿´µÃµ½br0£¬ÒòÎªÇÅ½ÓÊÇÔÚÊý¾ÝÁ´Â·²ãÊµÏÖµÄ£¬ÉÏ²ã²»ÐèÒª¹ØÐÄÇÅ½ÓµÄÏ¸½Ú¡£ÓÚÊÇÐ­ÒéÕ»ÉÏ²ãÐèÒª·¢ËÍµÄ±¨ÎÄ±»ËÍµ½br0£¬ÍøÇÅÉè±¸µÄ´¦Àí´úÂëÔÙÀ´ÅÐ¶Ï±¨ÎÄ¸Ã±»×ª·¢µ½eth0»òÊÇeth1£¬»òÕßÁ½Õß½ÔÊÇ£»·´¹ýÀ´£¬´Óeth0»ò´Óeth1½ÓÊÕµ½µÄ±¨ÎÄ±»Ìá½»¸øÍøÇÅµÄ´¦Àí´úÂë£¬ÔÚÕâÀï»áÅÐ¶Ï±¨ÎÄ¸Ã×ª·¢¡¢¶ªÆú¡¢»òÌá½»µ½Ð­ÒéÕ»ÉÏ²ã¡£
-* Bridge ¿ÉÒÔÉèÖÃ IP µØÖ·¡£Í¨³£À´Ëµ IP µØÖ·ÊÇÈý²ãÐ­ÒéµÄÄÚÈÝ£¬²»Ó¦¸Ã³öÏÖÔÚ¶þ²ãÉè±¸ Bridge ÉÏ¡£µ«ÊÇ Linux Àï Bridge ÊÇÍ¨ÓÃÍøÂçÉè±¸³éÏóµÄÒ»ÖÖ£¬Ö»ÒªÊÇÍøÂçÉè±¸¾ÍÄÜ¹»Éè¶¨ IP µØÖ·¡£µ±Ò»¸ö bridge0 ÓµÓÐ IP ºó£¬Linux ±ã¿ÉÒÔÍ¨¹ýÂ·ÓÉ±í»òÕß IP ±í¹æÔòÔÚÈý²ã¶¨Î» bridge0£¬´ËÊ±Ïàµ±ÓÚ Linux ÓµÓÐÁËÁíÍâÒ»¸öÒþ²ØµÄÐéÄâÍø¿¨ºÍ Bridge µÄÒþ²Ø¶Ë¿ÚÏàÁ¬£¬Õâ¸öÍø¿¨¾ÍÊÇÃûÎª bridge0 µÄÍ¨ÓÃÍøÂçÉè±¸£¬IP ¿ÉÒÔ¿´³ÉÊÇÕâ¸öÍø¿¨µÄ¡£µ±ÓÐ·ûºÏ´Ë IP µÄÊý¾Ýµ½´ï bridge0 Ê±£¬ÄÚºËÐ­ÒéÕ»ÈÏÎªÊÕµ½ÁËÒ»°üÄ¿±êÎª±¾»úµÄÊý¾Ý£¬´ËÊ±Ó¦ÓÃ³ÌÐò¿ÉÒÔÍ¨¹ý Socket ½ÓÊÕµ½Ëü¡£
+* bridgeçš„ä½œç”¨å…¶å®žæ˜¯ä¸€ä¸ªè™šæ‹Ÿçš„ç½‘æ¡¥ï¼Œå…¶è¡Œä¸ºå’Œæ ‡å‡†çš„ç½‘æ¡¥åº”è¯¥æ˜¯ç±»ä¼¼çš„ã€‚è¿žæŽ¥äº†å¤šä¸ªç½‘å¡ï¼ˆç‰©ç†æˆ–è€…è™šæ‹Ÿï¼‰ï¼Œå¹¶ä¸”èƒ½å°†æŠ¥æ–‡è½¬å‘åˆ°ç›¸åº”çš„å‡ºå£ï¼Œä½†ä¹Ÿæœ‰ä¸åŒçš„åœ°æ–¹ï¼šlinuxå†…æ ¸çš„æœºå™¨æœ¬èº«å°±æ˜¯ä¸€å°ä¸»æœºï¼Œæœ‰å¯èƒ½å°±æ˜¯ç½‘ç»œæŠ¥æ–‡çš„ç›®çš„åœ°ã€‚å…¶æ”¶åˆ°çš„æŠ¥æ–‡é™¤äº†è½¬å‘å’Œä¸¢å¼ƒï¼Œè¿˜å¯èƒ½è¢«é€åˆ°ç½‘ç»œåè®®æ ˆçš„ä¸Šå±‚ï¼ˆç½‘ç»œå±‚ï¼‰ï¼Œä»Žè€Œè¢«è‡ªå·±æ¶ˆåŒ–ã€‚
+* å¦‚å›¾ç½‘æ¡¥è®¾å¤‡br0ç»‘å®šäº†eth0å’Œeth1ã€‚å¯¹äºŽç½‘ç»œåè®®æ ˆçš„ä¸Šå±‚æ¥è¯´ï¼Œåªçœ‹å¾—åˆ°br0ï¼Œå› ä¸ºæ¡¥æŽ¥æ˜¯åœ¨æ•°æ®é“¾è·¯å±‚å®žçŽ°çš„ï¼Œä¸Šå±‚ä¸éœ€è¦å…³å¿ƒæ¡¥æŽ¥çš„ç»†èŠ‚ã€‚äºŽæ˜¯åè®®æ ˆä¸Šå±‚éœ€è¦å‘é€çš„æŠ¥æ–‡è¢«é€åˆ°br0ï¼Œç½‘æ¡¥è®¾å¤‡çš„å¤„ç†ä»£ç å†æ¥åˆ¤æ–­æŠ¥æ–‡è¯¥è¢«è½¬å‘åˆ°eth0æˆ–æ˜¯eth1ï¼Œæˆ–è€…ä¸¤è€…çš†æ˜¯ï¼›åè¿‡æ¥ï¼Œä»Žeth0æˆ–ä»Žeth1æŽ¥æ”¶åˆ°çš„æŠ¥æ–‡è¢«æäº¤ç»™ç½‘æ¡¥çš„å¤„ç†ä»£ç ï¼Œåœ¨è¿™é‡Œä¼šåˆ¤æ–­æŠ¥æ–‡è¯¥è½¬å‘ã€ä¸¢å¼ƒã€æˆ–æäº¤åˆ°åè®®æ ˆä¸Šå±‚ã€‚
+* Bridge å¯ä»¥è®¾ç½® IP åœ°å€ã€‚é€šå¸¸æ¥è¯´ IP åœ°å€æ˜¯ä¸‰å±‚åè®®çš„å†…å®¹ï¼Œä¸åº”è¯¥å‡ºçŽ°åœ¨äºŒå±‚è®¾å¤‡ Bridge ä¸Šã€‚ä½†æ˜¯ Linux é‡Œ Bridge æ˜¯é€šç”¨ç½‘ç»œè®¾å¤‡æŠ½è±¡çš„ä¸€ç§ï¼Œåªè¦æ˜¯ç½‘ç»œè®¾å¤‡å°±èƒ½å¤Ÿè®¾å®š IP åœ°å€ã€‚å½“ä¸€ä¸ª bridge0 æ‹¥æœ‰ IP åŽï¼ŒLinux ä¾¿å¯ä»¥é€šè¿‡è·¯ç”±è¡¨æˆ–è€… IP è¡¨è§„åˆ™åœ¨ä¸‰å±‚å®šä½ bridge0ï¼Œæ­¤æ—¶ç›¸å½“äºŽ Linux æ‹¥æœ‰äº†å¦å¤–ä¸€ä¸ªéšè—çš„è™šæ‹Ÿç½‘å¡å’Œ Bridge çš„éšè—ç«¯å£ç›¸è¿žï¼Œè¿™ä¸ªç½‘å¡å°±æ˜¯åä¸º bridge0 çš„é€šç”¨ç½‘ç»œè®¾å¤‡ï¼ŒIP å¯ä»¥çœ‹æˆæ˜¯è¿™ä¸ªç½‘å¡çš„ã€‚å½“æœ‰ç¬¦åˆæ­¤ IP çš„æ•°æ®åˆ°è¾¾ bridge0 æ—¶ï¼Œå†…æ ¸åè®®æ ˆè®¤ä¸ºæ”¶åˆ°äº†ä¸€åŒ…ç›®æ ‡ä¸ºæœ¬æœºçš„æ•°æ®ï¼Œæ­¤æ—¶åº”ç”¨ç¨‹åºå¯ä»¥é€šè¿‡ Socket æŽ¥æ”¶åˆ°å®ƒã€‚
 ### vlan
-* ÐéÄâ¾ÖÓòÍø£¨VLAN£©ÊÇÒ»×éÂß¼­ÉÏµÄÉè±¸ºÍÓÃ»§£¬ÕâÐ©Éè±¸ºÍÓÃ»§²¢²»ÊÜÎïÀíÎ»ÖÃµÄÏÞÖÆ£¬¿ÉÒÔ¸ù¾Ý¹¦ÄÜ¡¢²¿ÃÅ¼°Ó¦ÓÃµÈÒòËØ½«ËüÃÇ×éÖ¯ÆðÀ´£¬Ïà»¥Ö®¼äµÄÍ¨ÐÅ¾ÍºÃÏñËüÃÇÔÚÍ¬Ò»¸öÍø¶ÎÖÐÒ»Ñù£¬ÓÉ´ËµÃÃûÐéÄâ¾ÖÓòÍø¡£VLANµÄ»®·Ö£¬Ê¹µÃ¹ã²¥ÓòµÄ·¶Î§¿ÉÒÔÈËÎªÉè¶¨£¬Ìá¸ßÁË°²È«ÐÔ¡£Í¬Ê±ÒòÎª¹ã²¥ÓòµÄËõÐ¡£¬ÔÚÒ»¶¨Çé¿öÏÂ£¬¹ã²¥°üÉæ¼°µÄ»úÆ÷»á¸ü¼Ó¾«×¼£¬Ìá¸ß¹ã²¥Ð§ÂÊ¡£
-* Linux ÀïµÄ VLAN Éè±¸ÊÇ¶Ô 802.1.q Ð­ÒéµÄÒ»ÖÖÄÚ²¿Èí¼þÊµÏÖ£¬Ä£ÄâÏÖÊµÊÀ½çÖÐµÄ 802.1.q ½»»»»ú¡£Linux Àï 802.1.q VLAN Éè±¸ÊÇÒÔÄ¸×Ó¹ØÏµ³É¶Ô³öÏÖµÄ£¬Ä¸Éè±¸Ïàµ±ÓÚÏÖÊµÊÀ½çÖÐµÄ½»»»»úTRUNK ¿Ú£¬ÓÃÓÚÁ¬½ÓÉÏ¼¶ÍøÂç£¬×ÓÉè±¸Ïàµ±ÓÚÆÕÍ¨½Ó¿ÚÓÃÓÚÁ¬½ÓÏÂ¼¶ÍøÂç¡£¿ÉÒÔ°Ñ VLAN Ä¸×ÓÉè±¸×÷ÎªÒ»¸öÕûÌåÏëÏóÎªÏÖÊµÊÀ½çÖÐµÄ 802.1.q ½»»»»ú£¬ÏÂ¼¶½Ó¿ÚÍ¨¹ý×ÓÉè±¸Á¬½Óµ½¼ÄÖ÷ Linux ÏµÍ³ÍøÂçÀï£¬ÉÏ¼¶½Ó¿ÚÍ¬¹ýÖ÷Éè±¸Á¬½Óµ½ÉÏ¼¶ÍøÂç£¬µ±Ä¸Éè±¸ÊÇÎïÀíÍø¿¨Ê±ÉÏ¼¶ÍøÂçÊÇÍâ½çÕæÊµÍøÂç£¬µ±Ä¸Éè±¸ÊÇÁíÍâÒ»¸ö Linux ÐéÄâÍøÂçÉè±¸Ê±ÉÏ¼¶ÍøÂçÈÔÈ»ÊÇ¼ÄÖ÷ Linux ÏµÍ³ÍøÂç¡£ÐèÒª×¢ÒâµÄÊÇÄ¸×Ó VLAN Éè±¸ÓµÓÐÏàÍ¬µÄ MAC µØÖ·£¬¿ÉÒÔ°ÑËüµ±³ÉÏÖÊµÊÀ½çÖÐ 802.1.q ½»»»»úµÄ MAC£¬Òò´Ë¶à¸ö VLAN Éè±¸»á¹²ÏíÒ»¸ö MAC¡£µ±Ò»¸öÄ¸Éè±¸ÓµÓÐ¶à¸ö VLAN ×ÓÉè±¸Ê±£¬×ÓÉè±¸Ö®¼äÊÇ¸ôÀëµÄ£¬²»´æÔÚ Bridge ÄÇÑùµÄ½»»»×ª·¢¹ØÏµ
+* è™šæ‹Ÿå±€åŸŸç½‘ï¼ˆVLANï¼‰æ˜¯ä¸€ç»„é€»è¾‘ä¸Šçš„è®¾å¤‡å’Œç”¨æˆ·ï¼Œè¿™äº›è®¾å¤‡å’Œç”¨æˆ·å¹¶ä¸å—ç‰©ç†ä½ç½®çš„é™åˆ¶ï¼Œå¯ä»¥æ ¹æ®åŠŸèƒ½ã€éƒ¨é—¨åŠåº”ç”¨ç­‰å› ç´ å°†å®ƒä»¬ç»„ç»‡èµ·æ¥ï¼Œç›¸äº’ä¹‹é—´çš„é€šä¿¡å°±å¥½åƒå®ƒä»¬åœ¨åŒä¸€ä¸ªç½‘æ®µä¸­ä¸€æ ·ï¼Œç”±æ­¤å¾—åè™šæ‹Ÿå±€åŸŸç½‘ã€‚VLANçš„åˆ’åˆ†ï¼Œä½¿å¾—å¹¿æ’­åŸŸçš„èŒƒå›´å¯ä»¥äººä¸ºè®¾å®šï¼Œæé«˜äº†å®‰å…¨æ€§ã€‚åŒæ—¶å› ä¸ºå¹¿æ’­åŸŸçš„ç¼©å°ï¼Œåœ¨ä¸€å®šæƒ…å†µä¸‹ï¼Œå¹¿æ’­åŒ…æ¶‰åŠçš„æœºå™¨ä¼šæ›´åŠ ç²¾å‡†ï¼Œæé«˜å¹¿æ’­æ•ˆçŽ‡ã€‚
+* Linux é‡Œçš„ VLAN è®¾å¤‡æ˜¯å¯¹ 802.1.q åè®®çš„ä¸€ç§å†…éƒ¨è½¯ä»¶å®žçŽ°ï¼Œæ¨¡æ‹ŸçŽ°å®žä¸–ç•Œä¸­çš„ 802.1.q äº¤æ¢æœºã€‚Linux é‡Œ 802.1.q VLAN è®¾å¤‡æ˜¯ä»¥æ¯å­å…³ç³»æˆå¯¹å‡ºçŽ°çš„ï¼Œæ¯è®¾å¤‡ç›¸å½“äºŽçŽ°å®žä¸–ç•Œä¸­çš„äº¤æ¢æœºTRUNK å£ï¼Œç”¨äºŽè¿žæŽ¥ä¸Šçº§ç½‘ç»œï¼Œå­è®¾å¤‡ç›¸å½“äºŽæ™®é€šæŽ¥å£ç”¨äºŽè¿žæŽ¥ä¸‹çº§ç½‘ç»œã€‚å¯ä»¥æŠŠ VLAN æ¯å­è®¾å¤‡ä½œä¸ºä¸€ä¸ªæ•´ä½“æƒ³è±¡ä¸ºçŽ°å®žä¸–ç•Œä¸­çš„ 802.1.q äº¤æ¢æœºï¼Œä¸‹çº§æŽ¥å£é€šè¿‡å­è®¾å¤‡è¿žæŽ¥åˆ°å¯„ä¸» Linux ç³»ç»Ÿç½‘ç»œé‡Œï¼Œä¸Šçº§æŽ¥å£åŒè¿‡ä¸»è®¾å¤‡è¿žæŽ¥åˆ°ä¸Šçº§ç½‘ç»œï¼Œå½“æ¯è®¾å¤‡æ˜¯ç‰©ç†ç½‘å¡æ—¶ä¸Šçº§ç½‘ç»œæ˜¯å¤–ç•ŒçœŸå®žç½‘ç»œï¼Œå½“æ¯è®¾å¤‡æ˜¯å¦å¤–ä¸€ä¸ª Linux è™šæ‹Ÿç½‘ç»œè®¾å¤‡æ—¶ä¸Šçº§ç½‘ç»œä»ç„¶æ˜¯å¯„ä¸» Linux ç³»ç»Ÿç½‘ç»œã€‚éœ€è¦æ³¨æ„çš„æ˜¯æ¯å­ VLAN è®¾å¤‡æ‹¥æœ‰ç›¸åŒçš„ MAC åœ°å€ï¼Œå¯ä»¥æŠŠå®ƒå½“æˆçŽ°å®žä¸–ç•Œä¸­ 802.1.q äº¤æ¢æœºçš„ MACï¼Œå› æ­¤å¤šä¸ª VLAN è®¾å¤‡ä¼šå…±äº«ä¸€ä¸ª MACã€‚å½“ä¸€ä¸ªæ¯è®¾å¤‡æ‹¥æœ‰å¤šä¸ª VLAN å­è®¾å¤‡æ—¶ï¼Œå­è®¾å¤‡ä¹‹é—´æ˜¯éš”ç¦»çš„ï¼Œä¸å­˜åœ¨ Bridge é‚£æ ·çš„äº¤æ¢è½¬å‘å…³ç³»
 ### veth
-* VETH Éè±¸×ÜÊÇ³É¶Ô³öÏÖ£¬ËÍµ½Ò»¶ËÇëÇó·¢ËÍµÄÊý¾Ý×ÜÊÇ´ÓÁíÒ»¶ËÒÔÇëÇó½ÓÊÜµÄÐÎÊ½³öÏÖ¡£¸ÃÉè±¸²»ÄÜ±»ÓÃ»§³ÌÐòÖ±½Ó²Ù×÷£¬µ«Ê¹ÓÃÆðÀ´±È½Ï¼òµ¥¡£´´½¨²¢ÅäÖÃÕýÈ·ºó£¬ÏòÆäÒ»¶ËÊäÈëÊý¾Ý£¬VETH »á¸Ä±äÊý¾ÝµÄ·½Ïò²¢½«ÆäËÍÈëÄÚºËÍøÂçºËÐÄ£¬Íê³ÉÊý¾ÝµÄ×¢Èë£¬ÔÚÁíÒ»¶ËÄÜ¶Áµ½´ËÊý¾Ý¡£Í¬Ê±Ã¿¸öveth¶¼¿ÉÒÔ±»¸³ÓèIPµØÖ·£¬²¢²ÎÓëÈý²ãÍøÂçÂ·ÓÉ¹ý³Ì¡£
-## ËµÃ÷ÔÚcalicoÈÝÆ÷ÍøÂçÖÐ£¬Ò»¸öÊý¾Ý°ü´ÓÔ´ÈÝÆ÷·¢ËÍµ½Ä¿±êÈÝÆ÷½ÓÊÕµÄ¾ßÌå¹ý³Ì¡£
-### Calico ¼Ü¹¹ÓëºËÐÄ×é¼þ
+* VETH è®¾å¤‡æ€»æ˜¯æˆå¯¹å‡ºçŽ°ï¼Œé€åˆ°ä¸€ç«¯è¯·æ±‚å‘é€çš„æ•°æ®æ€»æ˜¯ä»Žå¦ä¸€ç«¯ä»¥è¯·æ±‚æŽ¥å—çš„å½¢å¼å‡ºçŽ°ã€‚è¯¥è®¾å¤‡ä¸èƒ½è¢«ç”¨æˆ·ç¨‹åºç›´æŽ¥æ“ä½œï¼Œä½†ä½¿ç”¨èµ·æ¥æ¯”è¾ƒç®€å•ã€‚åˆ›å»ºå¹¶é…ç½®æ­£ç¡®åŽï¼Œå‘å…¶ä¸€ç«¯è¾“å…¥æ•°æ®ï¼ŒVETH ä¼šæ”¹å˜æ•°æ®çš„æ–¹å‘å¹¶å°†å…¶é€å…¥å†…æ ¸ç½‘ç»œæ ¸å¿ƒï¼Œå®Œæˆæ•°æ®çš„æ³¨å…¥ï¼Œåœ¨å¦ä¸€ç«¯èƒ½è¯»åˆ°æ­¤æ•°æ®ã€‚åŒæ—¶æ¯ä¸ªvethéƒ½å¯ä»¥è¢«èµ‹äºˆIPåœ°å€ï¼Œå¹¶å‚ä¸Žä¸‰å±‚ç½‘ç»œè·¯ç”±è¿‡ç¨‹ã€‚
+## è¯´æ˜Žåœ¨calicoå®¹å™¨ç½‘ç»œä¸­ï¼Œä¸€ä¸ªæ•°æ®åŒ…ä»Žæºå®¹å™¨å‘é€åˆ°ç›®æ ‡å®¹å™¨æŽ¥æ”¶çš„å…·ä½“è¿‡ç¨‹ã€‚
+### Calico æž¶æž„ä¸Žæ ¸å¿ƒç»„ä»¶
 ![pic3](https://github.com/magicfisk/mesos_learning/raw/master/homework5/calico_arch.png)
-* Felix£¬Calico agent£¬ÅÜÔÚÃ¿Ì¨ÐèÒªÔËÐÐ workload µÄ½ÚµãÉÏ£¬Ö÷Òª¸ºÔðÅäÖÃÂ·ÓÉ¼° ACLs µÈÐÅÏ¢À´È·±£ endpoint µÄÁ¬Í¨×´Ì¬£»
-* etcd£¬·Ö²¼Ê½¼üÖµ´æ´¢£¬Ö÷Òª¸ºÔðÍøÂçÔªÊý¾ÝÒ»ÖÂÐÔ£¬È·±£ Calico ÍøÂç×´Ì¬µÄ×¼È·ÐÔ
-* BGP Client(BIRD), Ö÷Òª¸ºÔð°Ñ Felix Ð´Èë kernel µÄÂ·ÓÉÐÅÏ¢·Ö·¢µ½µ±Ç° Calico ÍøÂç£¬È·±£ workload ¼äµÄÍ¨ÐÅµÄÓÐÐ§ÐÔ£»
-* BGP Route Reflector(BIRD), ´ó¹æÄ£²¿ÊðÊ±Ê¹ÓÃ£¬ÞðÆúËùÓÐ½Úµã»¥ÁªµÄ mesh Ä£Ê½£¬Í¨¹ýÒ»¸ö»òÕß¶à¸ö BGP Route Reflector À´Íê³É¼¯ÖÐÊ½µÄÂ·ÓÉ·Ö·¢
-* Calico ÔÚÃ¿Ò»¸ö¼ÆËã½ÚµãÀûÓÃ Linux kernel ÊµÏÖÁËÒ»¸ö¸ßÐ§µÄ vRouter À´¸ºÔðÊý¾Ý×ª·¢ ¶øÃ¿¸ö vRouter Í¨¹ý BGP Ð­Òé¸ºÔð°Ñ×Ô¼ºÉÏÔËÐÐµÄ workload µÄÂ·ÓÉÐÅÏ¢ÏñÔÚÕû¸ö Calico ÍøÂçÄÚ´«²¥¡£Ð¡¹æÄ£²¿Êð¿ÉÒÔÖ±½Ó»¥Áª£¬´ó¹æÄ£ÏÂ¿ÉÍ¨¹ýÖ¸¶¨µÄ BGP route reflector À´Íê³É¡£±£Ö¤×îÖÕËùÓÐµÄ workload Ö®¼äµÄÊý¾ÝÁ÷Á¿¶¼ÊÇÍ¨¹ý IP °üµÄ·½Ê½Íê³É»¥ÁªµÄ¡£
-* Calico »ùÓÚ iptables »¹Ìá¹©ÁË·á¸»¶øÁé»îµÄÍøÂç policy, ±£Ö¤Í¨¹ý¸÷¸ö½ÚµãÉÏµÄ ACLs À´Ìá¹© workload µÄ¶à×â»§¸ôÀë¡¢°²È«×éÒÔ¼°ÆäËû¿É´ïÐÔÏÞÖÆµÈ¹¦ÄÜ¡£
+* Felixï¼ŒCalico agentï¼Œè·‘åœ¨æ¯å°éœ€è¦è¿è¡Œ workload çš„èŠ‚ç‚¹ä¸Šï¼Œä¸»è¦è´Ÿè´£é…ç½®è·¯ç”±åŠ ACLs ç­‰ä¿¡æ¯æ¥ç¡®ä¿ endpoint çš„è¿žé€šçŠ¶æ€ï¼›
+* etcdï¼Œåˆ†å¸ƒå¼é”®å€¼å­˜å‚¨ï¼Œä¸»è¦è´Ÿè´£ç½‘ç»œå…ƒæ•°æ®ä¸€è‡´æ€§ï¼Œç¡®ä¿ Calico ç½‘ç»œçŠ¶æ€çš„å‡†ç¡®æ€§
+* BGP Client(BIRD), ä¸»è¦è´Ÿè´£æŠŠ Felix å†™å…¥ kernel çš„è·¯ç”±ä¿¡æ¯åˆ†å‘åˆ°å½“å‰ Calico ç½‘ç»œï¼Œç¡®ä¿ workload é—´çš„é€šä¿¡çš„æœ‰æ•ˆæ€§ï¼›
+* BGP Route Reflector(BIRD), å¤§è§„æ¨¡éƒ¨ç½²æ—¶ä½¿ç”¨ï¼Œæ‘’å¼ƒæ‰€æœ‰èŠ‚ç‚¹äº’è”çš„ mesh æ¨¡å¼ï¼Œé€šè¿‡ä¸€ä¸ªæˆ–è€…å¤šä¸ª BGP Route Reflector æ¥å®Œæˆé›†ä¸­å¼çš„è·¯ç”±åˆ†å‘
+* Calico åœ¨æ¯ä¸€ä¸ªè®¡ç®—èŠ‚ç‚¹åˆ©ç”¨ Linux kernel å®žçŽ°äº†ä¸€ä¸ªé«˜æ•ˆçš„ vRouter æ¥è´Ÿè´£æ•°æ®è½¬å‘ è€Œæ¯ä¸ª vRouter é€šè¿‡ BGP åè®®è´Ÿè´£æŠŠè‡ªå·±ä¸Šè¿è¡Œçš„ workload çš„è·¯ç”±ä¿¡æ¯åƒåœ¨æ•´ä¸ª Calico ç½‘ç»œå†…ä¼ æ’­ã€‚å°è§„æ¨¡éƒ¨ç½²å¯ä»¥ç›´æŽ¥äº’è”ï¼Œå¤§è§„æ¨¡ä¸‹å¯é€šè¿‡æŒ‡å®šçš„ BGP route reflector æ¥å®Œæˆã€‚ä¿è¯æœ€ç»ˆæ‰€æœ‰çš„ workload ä¹‹é—´çš„æ•°æ®æµé‡éƒ½æ˜¯é€šè¿‡ IP åŒ…çš„æ–¹å¼å®Œæˆäº’è”çš„ã€‚
+* Calico åŸºäºŽ iptables è¿˜æä¾›äº†ä¸°å¯Œè€Œçµæ´»çš„ç½‘ç»œ policy, ä¿è¯é€šè¿‡å„ä¸ªèŠ‚ç‚¹ä¸Šçš„ ACLs æ¥æä¾› workload çš„å¤šç§Ÿæˆ·éš”ç¦»ã€å®‰å…¨ç»„ä»¥åŠå…¶ä»–å¯è¾¾æ€§é™åˆ¶ç­‰åŠŸèƒ½ã€‚
 ### Calico Docker network
-#### CNMÄ£ÐÍ
-* CNMÄ£ÐÍÊÇdockerÍ¨ÐÅµÄÒ»¸ö³éÏóÄ£ÐÍ£¬calicoÊÇ»ùÓÚ´ËÀ´ÊµÏÖÈÝÆ÷ÍøÂç
+#### CNMæ¨¡åž‹
+* CNMæ¨¡åž‹æ˜¯dockeré€šä¿¡çš„ä¸€ä¸ªæŠ½è±¡æ¨¡åž‹ï¼Œcalicoæ˜¯åŸºäºŽæ­¤æ¥å®žçŽ°å®¹å™¨ç½‘ç»œ
 ![pic4](https://github.com/magicfisk/mesos_learning/raw/master/homework5/cnm-model.jpg)
-* Sandbox£¬°üº¬ÈÝÆ÷ÍøÂçÕ»µÄÅäÖÃ£¬°üÀ¨ interface£¬Â·ÓÉ±í¼° DNSÅäÖÃ£¬¶ÔÓ¦µÄÊµÏÖÈç£ºLinux Network Namespace£»Ò»¸ö Sandbox ¿ÉÒÔ°üº¬¶à¸ö Network£»
-* Endpoint£¬×öÎª Sandbox ½ÓÈë Network µÄ½éÖÊ£¬¶ÔÓ¦µÄÊµÏÖÈç£ºveth pair£¬TAP£»Ò»¸ö Endpoint Ö»ÄÜÊôÓÚÒ»¸ö Network£¬Ò²Ö»ÄÜÊôÓÚÒ»¸ö Sandbox£»
-* Network£¬Ò»×é¿ÉÒÔÏà»¥Í¨ÐÅµÄ Endpoints£»¶ÔÓ¦µÄÊµÏÖÈç£ºLinux bridge£¬VLAN£»Network ÓÐ´óÁ¿ Endpoint ×ÊÔ´×é³É£»
-#### calicoÈÝÆ÷ÍøÂçÏ¸½Ú
+* Sandboxï¼ŒåŒ…å«å®¹å™¨ç½‘ç»œæ ˆçš„é…ç½®ï¼ŒåŒ…æ‹¬ interfaceï¼Œè·¯ç”±è¡¨åŠ DNSé…ç½®ï¼Œå¯¹åº”çš„å®žçŽ°å¦‚ï¼šLinux Network Namespaceï¼›ä¸€ä¸ª Sandbox å¯ä»¥åŒ…å«å¤šä¸ª Networkï¼›
+* Endpointï¼Œåšä¸º Sandbox æŽ¥å…¥ Network çš„ä»‹è´¨ï¼Œå¯¹åº”çš„å®žçŽ°å¦‚ï¼šveth pairï¼ŒTAPï¼›ä¸€ä¸ª Endpoint åªèƒ½å±žäºŽä¸€ä¸ª Networkï¼Œä¹Ÿåªèƒ½å±žäºŽä¸€ä¸ª Sandboxï¼›
+* Networkï¼Œä¸€ç»„å¯ä»¥ç›¸äº’é€šä¿¡çš„ Endpointsï¼›å¯¹åº”çš„å®žçŽ°å¦‚ï¼šLinux bridgeï¼ŒVLANï¼›Network æœ‰å¤§é‡ Endpoint èµ„æºç»„æˆï¼›
+#### calicoå®¹å™¨ç½‘ç»œç»†èŠ‚
 ![pic5](https://github.com/magicfisk/mesos_learning/raw/master/homework5/docker-calico-network.png)
-* µ±ÈÝÆ÷´´½¨Ê±£¬calicoÎªÈÝÆ÷Éú³Éveth pair£¬Ò»¶Ë×÷ÎªÈÝÆ÷Íø¿¨¼ÓÈëµ½ÈÝÆ÷µÄÍøÂçÃüÃû¿Õ¼ä£¬²¢ÉèÖÃIPºÍÑÚÂë£¬Ò»¶ËÖ±½Ó±©Â¶ÔÚËÞÖ÷»úÉÏ£¬²¢Í¨¹ýÉèÖÃÂ·ÓÉ¹æÔò£¬½«ÈÝÆ÷IP±©Â¶µ½ËÞÖ÷»úµÄÍ¨ÐÅÂ·ÓÉÉÏ¡£ÓÚ´ËÍ¬Ê±£¬calicoÎªÃ¿¸öÖ÷»ú·ÖÅäÁËÒ»¶Î×ÓÍø×÷ÎªÈÝÆ÷¿É·ÖÅäµÄIP·¶Î§£¬ÕâÑù¾Í¿ÉÒÔ¸ù¾Ý×ÓÍøµÄCIDRÎªÃ¿¸öÖ÷»úÉú³É±È½Ï¹Ì¶¨µÄÂ·ÓÉ¹æÔò¡£
-* µ±ÈÝÆ÷ÐèÒª¿çÖ÷»úÍ¨ÐÅÊ±£¬Ö÷Òª¾­¹ýÏÂÃæµÄ¼òµ¥²½Öè£º
-* 1.ÈÝÆ÷Á÷Á¿Í¨¹ýveth pairµ½´ïËÞÖ÷»úµÄÍøÂçÃüÃû¿Õ¼äÉÏ¡£
-* 2.¸ù¾ÝÈÝÆ÷Òª·ÃÎÊµÄIPËùÔÚµÄ×ÓÍøCIDRºÍÖ÷»úÉÏµÄÂ·ÓÉ¹æÔò£¬ÕÒµ½ÏÂÒ»ÌøÒªµ½´ïµÄËÞÖ÷»úIP¡£
-* 3.Á÷Á¿µ½´ïÏÂÒ»ÌøµÄËÞÖ÷»úºó£¬¸ù¾Ýµ±Ç°ËÞÖ÷»úÉÏµÄÂ·ÓÉ¹æÔò£¬Ö±½Óµ½´ï¶Ô¶ËÈÝÆ÷µÄveth pair²åÔÚËÞÖ÷»úµÄÒ»¶Ë£¬×îÖÕ½øÈëÈÝÆ÷¡£
-## µ÷ÑÐ³ýcalicoÒÔÍâµÄÈÎÒâÒ»ÖÖÈÝÆ÷ÍøÂç·½°¸£¬±È½ÏÆäÓëcalicoµÄÓÅÈ±µã¡£
-* weaveÍ¨¹ýÔÚdocker¼¯ÈºµÄÃ¿¸öÖ÷»úÉÏÆô¶¯ÐéÄâµÄÂ·ÓÉÆ÷£¬½«Ö÷»ú×÷ÎªÂ·ÓÉÆ÷£¬ÐÎ³É»¥Áª»¥Í¨µÄÍøÂçÍØÆË£¬ÔÚ´Ë»ù´¡ÉÏ£¬ÊµÏÖÈÝÆ÷µÄ¿çÖ÷»úÍ¨ÐÅ¡£
+* å½“å®¹å™¨åˆ›å»ºæ—¶ï¼Œcalicoä¸ºå®¹å™¨ç”Ÿæˆveth pairï¼Œä¸€ç«¯ä½œä¸ºå®¹å™¨ç½‘å¡åŠ å…¥åˆ°å®¹å™¨çš„ç½‘ç»œå‘½åç©ºé—´ï¼Œå¹¶è®¾ç½®IPå’ŒæŽ©ç ï¼Œä¸€ç«¯ç›´æŽ¥æš´éœ²åœ¨å®¿ä¸»æœºä¸Šï¼Œå¹¶é€šè¿‡è®¾ç½®è·¯ç”±è§„åˆ™ï¼Œå°†å®¹å™¨IPæš´éœ²åˆ°å®¿ä¸»æœºçš„é€šä¿¡è·¯ç”±ä¸Šã€‚äºŽæ­¤åŒæ—¶ï¼Œcalicoä¸ºæ¯ä¸ªä¸»æœºåˆ†é…äº†ä¸€æ®µå­ç½‘ä½œä¸ºå®¹å™¨å¯åˆ†é…çš„IPèŒƒå›´ï¼Œè¿™æ ·å°±å¯ä»¥æ ¹æ®å­ç½‘çš„CIDRä¸ºæ¯ä¸ªä¸»æœºç”Ÿæˆæ¯”è¾ƒå›ºå®šçš„è·¯ç”±è§„åˆ™ã€‚
+* å½“å®¹å™¨éœ€è¦è·¨ä¸»æœºé€šä¿¡æ—¶ï¼Œä¸»è¦ç»è¿‡ä¸‹é¢çš„ç®€å•æ­¥éª¤ï¼š
+* 1.å®¹å™¨æµé‡é€šè¿‡veth pairåˆ°è¾¾å®¿ä¸»æœºçš„ç½‘ç»œå‘½åç©ºé—´ä¸Šã€‚
+* 2.æ ¹æ®å®¹å™¨è¦è®¿é—®çš„IPæ‰€åœ¨çš„å­ç½‘CIDRå’Œä¸»æœºä¸Šçš„è·¯ç”±è§„åˆ™ï¼Œæ‰¾åˆ°ä¸‹ä¸€è·³è¦åˆ°è¾¾çš„å®¿ä¸»æœºIPã€‚
+* 3.æµé‡åˆ°è¾¾ä¸‹ä¸€è·³çš„å®¿ä¸»æœºåŽï¼Œæ ¹æ®å½“å‰å®¿ä¸»æœºä¸Šçš„è·¯ç”±è§„åˆ™ï¼Œç›´æŽ¥åˆ°è¾¾å¯¹ç«¯å®¹å™¨çš„veth pairæ’åœ¨å®¿ä¸»æœºçš„ä¸€ç«¯ï¼Œæœ€ç»ˆè¿›å…¥å®¹å™¨ã€‚
+## è°ƒç ”é™¤calicoä»¥å¤–çš„ä»»æ„ä¸€ç§å®¹å™¨ç½‘ç»œæ–¹æ¡ˆï¼Œæ¯”è¾ƒå…¶ä¸Žcalicoçš„ä¼˜ç¼ºç‚¹ã€‚
+* weaveé€šè¿‡åœ¨dockeré›†ç¾¤çš„æ¯ä¸ªä¸»æœºä¸Šå¯åŠ¨è™šæ‹Ÿçš„è·¯ç”±å™¨ï¼Œå°†ä¸»æœºä½œä¸ºè·¯ç”±å™¨ï¼Œå½¢æˆäº’è”äº’é€šçš„ç½‘ç»œæ‹“æ‰‘ï¼Œåœ¨æ­¤åŸºç¡€ä¸Šï¼Œå®žçŽ°å®¹å™¨çš„è·¨ä¸»æœºé€šä¿¡ã€‚
 ![pic6](https://github.com/magicfisk/mesos_learning/raw/master/homework5/weave-host-topology.png)
-* ÈçÉÏÍ¼ËùÊ¾£¬ÔÚÃ¿Ò»¸ö²¿ÊðDockerµÄÖ÷»ú£¨¿ÉÄÜÊÇÎïÀí»úÒ²¿ÉÄÜÊÇÐéÄâ»ú£©ÉÏ¶¼²¿ÊðÓÐÒ»¸öW£¨¼´weave router£¬Ëü±¾ÉíÒ²¿ÉÒÔÒÔÒ»¸öÈÝÆ÷µÄÐÎÊ½²¿Êð£©¡£weaveÍøÂçÊÇÓÉÕâÐ©weave routers×é³ÉµÄ¶ÔµÈ¶Ëµã£¨peer£©¹¹³É£¬²¢ÇÒ¿ÉÒÔÍ¨¹ýweaveÃüÁîÐÐ¶¨ÖÆÍøÂçÍØÆË¡£
-* µ±ÈÝÆ÷Í¨¹ýweave½øÐÐ¿çÖ÷»úÍ¨ÐÅÊ±£¬ÆäÍøÂçÍ¨ÐÅÄ£ÐÍ¿ÉÒÔ²Î¿¼ÏÂÍ¼£º
+* å¦‚ä¸Šå›¾æ‰€ç¤ºï¼Œåœ¨æ¯ä¸€ä¸ªéƒ¨ç½²Dockerçš„ä¸»æœºï¼ˆå¯èƒ½æ˜¯ç‰©ç†æœºä¹Ÿå¯èƒ½æ˜¯è™šæ‹Ÿæœºï¼‰ä¸Šéƒ½éƒ¨ç½²æœ‰ä¸€ä¸ªWï¼ˆå³weave routerï¼Œå®ƒæœ¬èº«ä¹Ÿå¯ä»¥ä»¥ä¸€ä¸ªå®¹å™¨çš„å½¢å¼éƒ¨ç½²ï¼‰ã€‚weaveç½‘ç»œæ˜¯ç”±è¿™äº›weave routersç»„æˆçš„å¯¹ç­‰ç«¯ç‚¹ï¼ˆpeerï¼‰æž„æˆï¼Œå¹¶ä¸”å¯ä»¥é€šè¿‡weaveå‘½ä»¤è¡Œå®šåˆ¶ç½‘ç»œæ‹“æ‰‘ã€‚
+* å½“å®¹å™¨é€šè¿‡weaveè¿›è¡Œè·¨ä¸»æœºé€šä¿¡æ—¶ï¼Œå…¶ç½‘ç»œé€šä¿¡æ¨¡åž‹å¯ä»¥å‚è€ƒä¸‹å›¾ï¼š
 ![pic6](https://github.com/magicfisk/mesos_learning/raw/master/homework5/docker-weave-network.png)
-* ¶ÔÃ¿Ò»¸öweaveÍøÂçÖÐµÄÈÝÆ÷£¬weave¶¼»á´´½¨Ò»¸öÍøÇÅ£¬²¢ÇÒÔÚÍøÇÅºÍÃ¿¸öÈÝÆ÷Ö®¼ä´´½¨Ò»¸öveth pair£¬Ò»¶Ë×÷ÎªÈÝÆ÷Íø¿¨¼ÓÈëµ½ÈÝÆ÷µÄÍøÂçÃüÃû¿Õ¼äÖÐ£¬²¢ÎªÈÝÆ÷Íø¿¨ÅäÖÃipºÍÏàÓ¦µÄÑÚÂë£¬Ò»¶ËÁ¬½ÓÔÚÍøÇÅÉÏ£¬×îÖÕÍ¨¹ýËÞÖ÷»úÉÏweave router½«Á÷Á¿×ª·¢µ½¶Ô¶ËÖ÷»úÉÏ¡£
-* »ù±¾Á÷³Ì£º
-* ÈÝÆ÷Á÷Á¿Í¨¹ýveth pairµ½´ïËÞÖ÷»úÉÏweave routerÍøÇÅÉÏ¡£
-* weave routerÔÚ»ìÔÓÄ£Ê½ÏÂÊ¹ÓÃpcapÔÚÍøÇÅÉÏ½Ø»ñÍøÂçÊý¾Ý°ü£¬²¢ÅÅ³ýÓÉÄÚºËÖ±½ÓÍ¨¹ýÍøÇÅ×ª·¢µÄÊý¾ÝÁ÷Á¿£¬ÀýÈç±¾×ÓÍøÄÚ²¿¡¢±¾µØÈÝÆ÷Ö®¼äµÄÊý¾ÝÒÔ¼°ËÞÖ÷»úºÍ±¾µØÈÝÆ÷Ö®¼äµÄÁ÷Á¿¡£²¶»ñµÄ°üÍ¨¹ýUDP×ª·¢µ½ËùÆäËûÖ÷»úµÄweave router¶Ë¡£
-* ÔÚ½ÓÊÕ¶Ë£¬weave routerÍ¨¹ýpcap½«°ü×¢Èëµ½ÍøÇÅÉÏµÄ½Ó¿Ú£¬Í¨¹ýÍøÇÅµÄÉÏµÄveth pair£¬½«Á÷Á¿·Ö·¢µ½ÈÝÆ÷µÄÍø¿¨ÉÏ¡£
-### calicoºÍweaveµÄ±È½Ï
+* å¯¹æ¯ä¸€ä¸ªweaveç½‘ç»œä¸­çš„å®¹å™¨ï¼Œweaveéƒ½ä¼šåˆ›å»ºä¸€ä¸ªç½‘æ¡¥ï¼Œå¹¶ä¸”åœ¨ç½‘æ¡¥å’Œæ¯ä¸ªå®¹å™¨ä¹‹é—´åˆ›å»ºä¸€ä¸ªveth pairï¼Œä¸€ç«¯ä½œä¸ºå®¹å™¨ç½‘å¡åŠ å…¥åˆ°å®¹å™¨çš„ç½‘ç»œå‘½åç©ºé—´ä¸­ï¼Œå¹¶ä¸ºå®¹å™¨ç½‘å¡é…ç½®ipå’Œç›¸åº”çš„æŽ©ç ï¼Œä¸€ç«¯è¿žæŽ¥åœ¨ç½‘æ¡¥ä¸Šï¼Œæœ€ç»ˆé€šè¿‡å®¿ä¸»æœºä¸Šweave routerå°†æµé‡è½¬å‘åˆ°å¯¹ç«¯ä¸»æœºä¸Šã€‚
+* åŸºæœ¬æµç¨‹ï¼š
+* å®¹å™¨æµé‡é€šè¿‡veth pairåˆ°è¾¾å®¿ä¸»æœºä¸Šweave routerç½‘æ¡¥ä¸Šã€‚
+* weave routeråœ¨æ··æ‚æ¨¡å¼ä¸‹ä½¿ç”¨pcapåœ¨ç½‘æ¡¥ä¸ŠæˆªèŽ·ç½‘ç»œæ•°æ®åŒ…ï¼Œå¹¶æŽ’é™¤ç”±å†…æ ¸ç›´æŽ¥é€šè¿‡ç½‘æ¡¥è½¬å‘çš„æ•°æ®æµé‡ï¼Œä¾‹å¦‚æœ¬å­ç½‘å†…éƒ¨ã€æœ¬åœ°å®¹å™¨ä¹‹é—´çš„æ•°æ®ä»¥åŠå®¿ä¸»æœºå’Œæœ¬åœ°å®¹å™¨ä¹‹é—´çš„æµé‡ã€‚æ•èŽ·çš„åŒ…é€šè¿‡UDPè½¬å‘åˆ°æ‰€å…¶ä»–ä¸»æœºçš„weave routerç«¯ã€‚
+* åœ¨æŽ¥æ”¶ç«¯ï¼Œweave routeré€šè¿‡pcapå°†åŒ…æ³¨å…¥åˆ°ç½‘æ¡¥ä¸Šçš„æŽ¥å£ï¼Œé€šè¿‡ç½‘æ¡¥çš„ä¸Šçš„veth pairï¼Œå°†æµé‡åˆ†å‘åˆ°å®¹å™¨çš„ç½‘å¡ä¸Šã€‚
+### calicoå’Œweaveçš„æ¯”è¾ƒ
 #### weave
-* ÓÅµã£ºweaveÄ¬ÈÏ»ùÓÚUDP³ÐÔØÈÝÆ÷Ö®¼äµÄÊý¾Ý°ü£¬²¢ÇÒ¿ÉÒÔÍêÈ«×Ô¶¨ÒåÕû¸ö¼¯ÈºµÄÍøÂçÍØÆË£¬±È½ÏÁé»î
-* È±µã1£º
-weave×Ô¶¨ÒåÈÝÆ÷Êý¾Ý°üµÄ·â°ü½â°ü·½Ê½£¬²»¹»Í¨ÓÃ£¬´«ÊäÐ§ÂÊ±È½ÏµÍ£¬ÐÔÄÜÉÏµÄËðÊ§Ò²±È½Ï´ó¡£
-* È±µã2£º¼¯ÈºÅäÖÃ±È½Ï¸ºÔØ£¬ÐèÒªÍ¨¹ýweaveÃüÁîÐÐÀ´ÊÖ¹¤¹¹½¨ÍøÂçÍØÆË£¬ÔÚ´ó¹æÄ£¼¯ÈºµÄÇé¿öÏÂ£¬¼ÓÖØÁË¹ÜÀíÔ±µÄ¸ºµ£¡£
+* ä¼˜ç‚¹ï¼šweaveé»˜è®¤åŸºäºŽUDPæ‰¿è½½å®¹å™¨ä¹‹é—´çš„æ•°æ®åŒ…ï¼Œå¹¶ä¸”å¯ä»¥å®Œå…¨è‡ªå®šä¹‰æ•´ä¸ªé›†ç¾¤çš„ç½‘ç»œæ‹“æ‰‘ï¼Œæ¯”è¾ƒçµæ´»
+* ç¼ºç‚¹1ï¼š
+weaveè‡ªå®šä¹‰å®¹å™¨æ•°æ®åŒ…çš„å°åŒ…è§£åŒ…æ–¹å¼ï¼Œä¸å¤Ÿé€šç”¨ï¼Œä¼ è¾“æ•ˆçŽ‡æ¯”è¾ƒä½Žï¼Œæ€§èƒ½ä¸Šçš„æŸå¤±ä¹Ÿæ¯”è¾ƒå¤§ã€‚
+* ç¼ºç‚¹2ï¼šé›†ç¾¤é…ç½®æ¯”è¾ƒè´Ÿè½½ï¼Œéœ€è¦é€šè¿‡weaveå‘½ä»¤è¡Œæ¥æ‰‹å·¥æž„å»ºç½‘ç»œæ‹“æ‰‘ï¼Œåœ¨å¤§è§„æ¨¡é›†ç¾¤çš„æƒ…å†µä¸‹ï¼ŒåŠ é‡äº†ç®¡ç†å‘˜çš„è´Ÿæ‹…ã€‚
 #### calico
-* ÓÅµã£º¿çÖ÷»úÍ¨ÐÅÊ±£¬Õû¸öÍ¨ÐÅÂ·¾¶ÍêÈ«Ã»ÓÐÊ¹ÓÃNAT»òÕßUDP·â×°£¬ÐÔÄÜÉÏµÄËðºÄÈ·Êµ±È½ÏµÍ
-* È±µã1£ºcalicoÄ¿Ç°Ö»Ö§³ÖTCP¡¢UDP¡¢ICMP¡¢ICMPv6Ð­Òé£¬Èç¹ûÊ¹ÓÃÆäËûËÄ²ãÐ­Òé£¨ÀýÈçNetBIOSÐ­Òé£©£¬½¨ÒéÊ¹ÓÃweave¡¢Ô­ÉúoverlayµÈÆäËûoverlayÍøÂçÊµÏÖ¡£
-* È±µã2£º»ùÓÚÈý²ãÊµÏÖÍ¨ÐÅ£¬ÔÚ¶þ²ãÉÏÃ»ÓÐÈÎºÎ¼ÓÃÜ°ü×°£¬Òò´ËÖ»ÄÜÔÚË½ÓÐµÄ¿É¿¿ÍøÂçÉÏÊ¹ÓÃ¡£
-* È±µã3£ºÁ÷Á¿¸ôÀë»ùÓÚiptablesÊµÏÖ£¬²¢ÇÒ´ÓetcdÖÐ»ñÈ¡ÐèÒªÉú³ÉµÄ¸ôÀë¹æÔò£¬ÓÐÒ»Ð©ÐÔÄÜÉÏµÄÒþ»¼¡£
+* ä¼˜ç‚¹ï¼šè·¨ä¸»æœºé€šä¿¡æ—¶ï¼Œæ•´ä¸ªé€šä¿¡è·¯å¾„å®Œå…¨æ²¡æœ‰ä½¿ç”¨NATæˆ–è€…UDPå°è£…ï¼Œæ€§èƒ½ä¸Šçš„æŸè€—ç¡®å®žæ¯”è¾ƒä½Ž
+* ç¼ºç‚¹1ï¼šcalicoç›®å‰åªæ”¯æŒTCPã€UDPã€ICMPã€ICMPv6åè®®ï¼Œå¦‚æžœä½¿ç”¨å…¶ä»–å››å±‚åè®®ï¼ˆä¾‹å¦‚NetBIOSåè®®ï¼‰ï¼Œå»ºè®®ä½¿ç”¨weaveã€åŽŸç”Ÿoverlayç­‰å…¶ä»–overlayç½‘ç»œå®žçŽ°ã€‚
+* ç¼ºç‚¹2ï¼šåŸºäºŽä¸‰å±‚å®žçŽ°é€šä¿¡ï¼Œåœ¨äºŒå±‚ä¸Šæ²¡æœ‰ä»»ä½•åŠ å¯†åŒ…è£…ï¼Œå› æ­¤åªèƒ½åœ¨ç§æœ‰çš„å¯é ç½‘ç»œä¸Šä½¿ç”¨ã€‚
+* ç¼ºç‚¹3ï¼šæµé‡éš”ç¦»åŸºäºŽiptableså®žçŽ°ï¼Œå¹¶ä¸”ä»Žetcdä¸­èŽ·å–éœ€è¦ç”Ÿæˆçš„éš”ç¦»è§„åˆ™ï¼Œæœ‰ä¸€äº›æ€§èƒ½ä¸Šçš„éšæ‚£ã€‚
