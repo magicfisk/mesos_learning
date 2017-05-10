@@ -292,8 +292,9 @@ docker build -t jp_docker/ssh_docker .
 * 来在各个服务器上生成镜像
 ### mesos
 * 编写一个pymesos来调度docker
+* 核心部分为
 ```
-		if self.Task_launched==1 :
+		if self.Task_launched==0:
 			ip = Dict()
 			ip.key = 'ip'
 			ip.value = '192.0.1.100'
@@ -318,10 +319,11 @@ docker build -t jp_docker/ssh_docker .
 			CommandInfo.shell = False
 
 			task = Dict()
-			task_id = 'jp'
+			task_id = 'Jupyter'
 			task.task_id.value = task_id
 			task.agent_id.value = offer.agent_id.value
-			task.name = 'jupyter'
+			task.name = 'jp'
+			
 			task.container = ContainerInfo
 			task.command = CommandInfo
 			
@@ -351,10 +353,11 @@ docker build -t jp_docker/ssh_docker .
 			CommandInfo.shell = False
 
 			task = Dict()
-			task_id = 'ssh'
+			task_id = 'ssh'+str(self.Task_launched)
 			task.task_id.value = task_id
 			task.agent_id.value = offer.agent_id.value
 			task.name = 'ssh'
+			
 			task.container = ContainerInfo
 			task.command = CommandInfo
 
@@ -365,8 +368,8 @@ docker build -t jp_docker/ssh_docker .
 
 		driver.launchTasks(offer.id, [task], filters) #调度任务
 ```
-* 其中task 1为jupyter_docker，其余的为带ssh的docker
-@ 图片
+* 先创建一个Jupyter容器作为管理，然后在创建若干带ssh的docker
+![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework5/mesos.jpg)
 ### 利用http-proxy转发端口
 * 安装
 ```
@@ -384,3 +387,4 @@ nohup configurable-http-proxy --default-target=http://192.0.1.100:8888 --ip=172.
 * 暂时通过手工转发
 ![pic2](https://github.com/magicfisk/mesos_learning/raw/master/homework5/jpt.jpg)
 * 成功在外网登上jupyter notebook
+* http://162.105.174.33:8888
