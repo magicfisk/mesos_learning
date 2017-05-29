@@ -165,23 +165,31 @@ weave自定义容器数据包的封包解包方式，不够通用，传输效率
 
 #### etcd集群环境设置
 ```
-p1001:
+etcd --name p1000 --initial-advertise-peer-urls http://172.16.6.2:2380 \
+--listen-peer-urls http://172.16.6.2:2380 \
+--listen-client-urls http://172.16.6.2:2379,http://127.0.0.1:2379 \
+--advertise-client-urls http://172.16.6.2:2379 \
+--initial-cluster-token etcd-cluster-hw5 \
+--initial-cluster p1000=http://172.16.6.2:2380,p1001=http://172.16.6.153:2380,p1003=http://172.16.6.249:2380 \
+--initial-cluster-state new
+
+
 etcd --name p1001 --initial-advertise-peer-urls http://172.16.6.153:2380 \
 --listen-peer-urls http://172.16.6.153:2380 \
 --listen-client-urls http://172.16.6.153:2379,http://127.0.0.1:2379 \
 --advertise-client-urls http://172.16.6.153:2379 \
 --initial-cluster-token etcd-cluster-hw5 \
---initial-cluster p1001=http://172.16.6.153:2380,p1003=http://172.16.6.249:2380 \
+--initial-cluster p1000=http://172.16.6.2:2380,p1001=http://172.16.6.153:2380,p1003=http://172.16.6.249:2380 \
 --initial-cluster-state new
 
-p1003:
 etcd --name p1003 --initial-advertise-peer-urls http://172.16.6.249:2380 \
 --listen-peer-urls http://172.16.6.249:2380 \
 --listen-client-urls http://172.16.6.249:2379,http://127.0.0.1:2379 \
 --advertise-client-urls http://172.16.6.249:2379 \
 --initial-cluster-token etcd-cluster-hw5 \
---initial-cluster p1001=http://172.16.6.153:2380,p1003=http://172.16.6.249:2380 \
+--initial-cluster p1000=http://172.16.6.2:2380,p1001=http://172.16.6.153:2380,p1003=http://172.16.6.249:2380 \
 --initial-cluster-state new
+
 ```
 * 检查
 ```
