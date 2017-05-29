@@ -100,7 +100,7 @@ I0529 04:20:11.362989 60163 log.cpp:553] Attempting to start the writer
 #### framework崩溃
 * kill的结果直接就是框架结束了，若要实现容错，需要自己注册多个框架，这里就不验证了
 ## 综合作业
-* 总体思路
+* 总体思路<br>
 1.利用etcd的kv对来保存host和ip的对应<br>
 2.每个ip在需要为自己在kv对中维护自己ip对应的alive标记，设置ttl，在挂了之后标记自动失效<br>
 3.leader节点利用2中的信息，需要维护hostname和ip的对应<br>
