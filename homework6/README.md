@@ -101,11 +101,11 @@ I0529 04:20:11.362989 60163 log.cpp:553] Attempting to start the writer
 * kill的结果直接就是框架结束了，若要实现容错，需要自己注册多个框架，这里就不验证了
 ## 综合作业
 * 总体思路
-1.利用etcd的kv对来保存host和ip的对应
-2.每个ip在需要为自己在kv对中维护自己ip对应的alive标记，设置ttl，在挂了之后标记自动失效
-3.leader节点利用2中的信息，需要维护hostname和ip的对应
-4.每个主机都要读取leader维护的hostname-ip表，并更新自己本地的host
-5.利用分布文件系统共享ssh的id_rsa.pub，实现免密登入
+1.利用etcd的kv对来保存host和ip的对应<br>
+2.每个ip在需要为自己在kv对中维护自己ip对应的alive标记，设置ttl，在挂了之后标记自动失效<br>
+3.leader节点利用2中的信息，需要维护hostname和ip的对应<br>
+4.每个主机都要读取leader维护的hostname-ip表，并更新自己本地的host<br>
+5.利用分布文件系统共享ssh的id_rsa.pub，实现免密登入<br>
 
 
 
