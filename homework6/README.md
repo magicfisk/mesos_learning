@@ -103,9 +103,157 @@ I0529 04:20:11.362989 60163 log.cpp:553] Attempting to start the writer
 * 总体思路<br>
 1.利用etcd的kv对来保存host和ip的对应<br>
 2.每个ip在需要为自己在kv对中维护自己ip对应的alive标记，设置ttl，在挂了之后标记自动失效<br>
-3.leader节点利用2中的信息，需要维护hostname和ip的对应<br>
-4.每个主机都要读取leader维护的hostname-ip表，并更新自己本地的host<br>
+3.leader节点维护leader目录下自己的alive标记，follwer节点维护follwer目录下的alive标记<br>
+4.每个主机都要读取alive标记，可以计算出host表<br>
 5.利用分布文件系统共享ssh的id_rsa.pub，实现免密登入<br>
+### 准备工作
+* 创建一个docker镜像，装好python、etcd、jupyter、vim、openssh-serverd等等
+```
+FROM ubuntu:latest
+
+RUN apt-get update
+RUN apt-get install -y wget
+
+RUN wget -P /root https://github.com/coreos/etcd/releases/download/v3.1.7/etcd-v3.1.7-linux-amd64.tar.gz && tar -zxf /root/etcd-v3.1.7-linux-amd64.tar.gz -C /root
+RUN ln -s /root/etcd-v3.1.7-linux-amd64/etcd /usr/local/bin/etcd && ln -s /root/etcd-v3.1.7-linux-amd64/etcdctl /usr/local/bin/etcdctl
+
+RUN apt-get update
+RUN apt-get install -y ssh
+RUN apt-get install -y openssh-server
+RUN apt-get install -y python3-pip
+RUN apt-get install -y vim
+RUN pip3 install jupyter
+RUN apt-get install -y sudo
+ADD /mnt/code.py /home/admin/code.py
+RUN useradd admin
+RUN echo "admin:admin" | chpasswd
+RUN echo "admin   ALL=(ALL)       ALL" >> /etc/sudoers
+RUN mkdir /var/run/sshd
+
+# 开放22端口并运行jupyter
+EXPOSE 22
+USER admin
+WORKDIR /home/admin
+
+CMD ["/bin/bash"]
+```
+* 为每个容器编写一个守护程序
+```
+import subprocess, sys, os, socket, signal, json, time
+import urllib.request, urllib.error
+from sys import argv
+
+#通过ip和集群的list列表，启动etcd集群
+def etcd(ip,list):
+	args = ['etcd', '--name', 'p'+ip[-1], '--initial-advertise-peer-urls', 'http://'+ip+':2380','--listen-peer-urls', 'http://'+ip+ ':2380','--listen-client-urls', 'http://'+ip+':2379,http://127.0.0.1:2379','--advertise-client-urls', 'http://'+ip+':2379','--initial-cluster-token', 'etcd-cluster-hw5','--initial-cluster', list ,'--initial-cluster-state', 'new']
+	subprocess.Popen(args)
+
+#通过etcd的集群，计算host表
+def update_host(n):
+	f=open("tmp-host","w")
+	err=0
+	for i in range(0,n):
+		tag=os.system('etcdctl get /leader/192.0.1.10' + str(i))
+		if tag==0: #如果值存在，则返回值为0，否则为1024
+			f.write("192.0.1.10" + str(i)+" host0\n")
+			break
+	cnt=1
+	for i in range(0,n):
+		tag=os.system('etcdctl get /follower/192.0.1.10' + str(i))
+		if tag==0:
+			f.write("192.0.1.10" + str(i)+" host"+str(cnt)+"\n")
+			cnt=cnt+1
+	f.close()
+	os.system("cp tmp-host /etc/hosts") #将计算出来的值拷贝到本机hosts
+	
+
+def main():
+
+	script,ip,nodeN = argv #获取参数，本机ip和总节点数目
+	
+	os.system('ssh-keygen -f /home/admin/.ssh/id_rsa -t rsa -N ""') #为本机的ssh访问产生密钥
+	os.system('sudo -S bash -c "cat /home/admin/.ssh/id_rsa.pub >> /mnt/authorized_keys"') #将公钥拷贝到分布式文件系统中
+	os.system("/etc/init.d/ssh start") #启动ssh服务
+	
+	n=int(nodeN)
+	leader_flag=0
+	list="p0=http://192.0.1.100:2380"
+	#构造集群列表
+	for i in range(1,n):
+		list=list+",p"+str(i)+"=http://192.0.1.10"+str(i)+":2380"
+	
+	#启动etcd服务
+	etcd(ip,list)
+	
+	stats_url = 'http://127.0.0.1:2379/v2/stats/self'
+	stats_request = urllib.request.Request(stats_url)
+	
+	#以下部分为守护进程的代码
+	while True:
+		try:
+			stats_reponse = urllib.request.urlopen(stats_request)
+		except urllib.error.URLError as e:
+			print('[WARN] ', e.reason)
+			print('[WARN] Wating etcd...')
+
+		else:
+			stats_json = stats_reponse.read().decode('utf-8')
+			data = json.loads(stats_json)
+			#利用etcd集群的接口，判断自己是不是leader
+			if data['state'] == 'StateLeader':
+				if leader_flag == 0: #如果是第一次成为leader，需要启动jupyter
+					leader_flag = 1
+
+					args = ['jupyter', 'notebook', '--NotebookApp.token=', '--ip=0.0.0.0', '--port=8888']
+					subprocess.Popen(args)
+				# 更新自己leader的alive标记	
+				os.system('etcdctl set /leader/' + ip + ' ' + "1 --ttl 5")
+				#leader负责将host表拷贝到联合文件系统中，方便外面查看
+				os.system("sudo cp tmp-host /mnt/hosts")
+				
+			elif data['state'] == 'StateFollower':
+				# 更新自己作为follwer的alive标记
+				os.system('etcdctl set /follower/' + ip + ' ' + "1 --ttl 5")
+		#更新完标记后，每个主机计算最新的host表
+		update_host(n)
+		#守护进程的频率为1s一次
+		time.sleep(1)
 
 
-
+if __name__ == '__main__':
+	main()
+```
+* 计算host的原理<br>
+利用etcdctl get命令，我们试图去访问alive标记，如果节点存在，则访问成功，否则访问失败<br>
+所以先访问leader目录下的标记，确定host0<br>
+然后根据follwer目录下，进行顺序访问，确定其余的host<br>
+由于etcd能够保证kv值一致，所以所有主机计算出来的host-ip表也是一致的<br>
+* alive更新<br>
+因为kv有ttl，所以一旦主机死了，kv就会失效<br>
+守护程序每1s更新一次alive，而ttl设置为5s，所以只要主机健康，就不会掉线<br>
+* 如何达成ssh的免密码访问<br>
+原理：ssh服务通过本地的authorized_keys文件确定信任的主机，A主机将rsa加密中的公钥存在B主机的authorized_keys文件中，A登入B时候，B发送一个通过公钥加密的随机字符串，A返回利用私钥解密的字符串，B验证字符串正确，然后放行A。<br>
+关键：只要authorized_keys中有来访者的公钥就可以免密登入<br>
+实现：<br>
+1.需要修改sshd的配置文件,使得authorized_keys的文件位置重定位到/mnt/中，即所有集群共享用一个authorized_keys。<br>
+2.每个主机启动后，将自己的公钥加入/mnt/authorized_keys中，这样所有其他主机都能成为信任对象。<br>
+* mesos的framework，基本可以参照以往的作业，此处不详细展开
+* http转发，在/mnt/目录中，有leader帮忙拷贝的host文件，通过host文件，可以看到leader的ip，然后就可以转发了
+```
+nohup configurable-http-proxy --default-target=http://192.0.1.100:8888 --ip=172.16.6.153 --port=8888
+```
+### 容错验证
+* 通过http://162.105.174.33:8888/terminals/1登入jupter界面,可以看到host表中已经维护好
+![pic6](https://github.com/magicfisk/mesos_learning/raw/master/homework6/init.jpg)<br>
+* 利用ssh登入其他主机，可以看到只用yes，不用密码
+![pic7](https://github.com/magicfisk/mesos_learning/raw/master/homework6/ssh.jpg)<br>
+* 这时，我们将docker中一个容器stop掉，经过5s的等待，重新查看host表
+![pic8](https://github.com/magicfisk/mesos_learning/raw/master/homework6/host.jpg)<br>
+* 我们发现host表更新了，少了我们stop的主机
+* 我们把leader给stop掉
+![pic9](https://github.com/magicfisk/mesos_learning/raw/master/homework6/mnt.jpg)<br>
+在分布式文件系统中检查到105成为了新的leader，我们到105所在的机器下，进行http转发
+```
+configurable-http-proxy --default-target=http://192.0.1.105:8888 --ip=172.16.6.249 --port=8888
+```
+* 登入jupter界面
