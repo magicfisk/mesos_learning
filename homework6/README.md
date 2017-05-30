@@ -207,17 +207,17 @@ def main():
 					args = ['jupyter', 'notebook', '--NotebookApp.token=', '--ip=0.0.0.0', '--port=8888']
 					subprocess.Popen(args)
 				# 更新自己leader的alive标记	
-				os.system('etcdctl set /leader/' + ip + ' ' + "1 --ttl 5")
+				os.system('etcdctl set /leader/' + ip + ' ' + "1 --ttl 30")
 				#leader负责将host表拷贝到联合文件系统中，方便外面查看
 				os.system("sudo cp tmp-host /mnt/hosts")
 				
 			elif data['state'] == 'StateFollower':
 				# 更新自己作为follwer的alive标记
-				os.system('etcdctl set /follower/' + ip + ' ' + "1 --ttl 5")
+				os.system('etcdctl set /follower/' + ip + ' ' + "1 --ttl 30")
 		#更新完标记后，每个主机计算最新的host表
 		update_host(n)
-		#守护进程的频率为1s一次
-		time.sleep(1)
+		#守护进程的频率为10s一次
+		time.sleep(10)
 
 
 if __name__ == '__main__':
@@ -230,7 +230,7 @@ if __name__ == '__main__':
 由于etcd能够保证kv值一致，所以所有主机计算出来的host-ip表也是一致的<br>
 * alive更新<br>
 因为kv有ttl，所以一旦主机死了，kv就会失效<br>
-守护程序每1s更新一次alive，而ttl设置为5s，所以只要主机健康，就不会掉线<br>
+守护程序每10s更新一次alive，而ttl设置为30s，所以只要主机健康，就不会掉线<br>
 * 如何达成ssh的免密码访问<br>
 原理：ssh服务通过本地的authorized_keys文件确定信任的主机，A主机将rsa加密中的公钥存在B主机的authorized_keys文件中，A登入B时候，B发送一个通过公钥加密的随机字符串，A返回利用私钥解密的字符串，B验证字符串正确，然后放行A。<br>
 关键：只要authorized_keys中有来访者的公钥就可以免密登入<br>
@@ -243,17 +243,20 @@ if __name__ == '__main__':
 nohup configurable-http-proxy --default-target=http://192.0.1.100:8888 --ip=172.16.6.153 --port=8888
 ```
 ### 容错验证
-* 通过http://162.105.174.33:8888/terminals/1登入jupter界面,可以看到host表中已经维护好
+* 登入jupter界面,可以看到host表中已经维护好<br>
 ![pic6](https://github.com/magicfisk/mesos_learning/raw/master/homework6/init.jpg)<br>
-* 利用ssh登入其他主机，可以看到只用yes，不用密码
+* 利用ssh登入其他主机，可以看到只用yes，不用密码<br>
 ![pic7](https://github.com/magicfisk/mesos_learning/raw/master/homework6/ssh.jpg)<br>
-* 这时，我们将docker中一个容器stop掉，经过5s的等待，重新查看host表
+* 这时，我们将docker中一个容器stop掉（103），经过30s的等待，重新查看host表<br>
 ![pic8](https://github.com/magicfisk/mesos_learning/raw/master/homework6/host.jpg)<br>
-* 我们发现host表更新了，少了我们stop的主机
-* 我们把leader给stop掉
+* 我们发现host表更新了，少了我们stop的主机<br>
+* 我们把leader给stop掉<br>
 ![pic9](https://github.com/magicfisk/mesos_learning/raw/master/homework6/mnt.jpg)<br>
-在分布式文件系统中检查到105成为了新的leader，我们到105所在的机器下，进行http转发
+在分布式文件系统中检查到100成为了新的leader，我们到100所在的机器下，进行http转发
 ```
-configurable-http-proxy --default-target=http://192.0.1.105:8888 --ip=172.16.6.249 --port=8888
+configurable-http-proxy --default-target=http://192.0.1.100:8888 --ip=172.16.6.153 --port=8888
 ```
-* 登入jupter界面
+* 登入jupter界面,可以看到我们的新leader很好的在工作
+![pic10](https://github.com/magicfisk/mesos_learning/raw/master/homework6/new-leader.jpg)<br>
+* ssh也照样正常工作
+![pic11](https://github.com/magicfisk/mesos_learning/raw/master/homework6/ssh2.jpg)<br>
