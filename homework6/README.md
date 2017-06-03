@@ -260,3 +260,36 @@ configurable-http-proxy --default-target=http://192.0.1.100:8888 --ip=172.16.6.1
 ![pic10](https://github.com/magicfisk/mesos_learning/raw/master/homework6/new-leader.jpg)<br>
 * ssh也照样正常工作
 ![pic11](https://github.com/magicfisk/mesos_learning/raw/master/homework6/ssh2.jpg)<br>
+### 补充-自动转发
+* 在转发端口的机器下起一个ip为192.0.1.110的docker容器
+* 运行转发代码
+```
+import subprocess,time
+
+ip=""
+while True:
+        f=open("/mnt/hosts") #读取master维护的hosts表
+        nip=f.readline()
+        f.close()
+        nip=nip.split(" ")
+        nip=nip[0]; #获得当前master的ip
+        print("check ip:"+ip+" nip:"+nip+"\n")
+        if not ip==nip:  #不一样就要重新转发
+                print("updata\n")
+                if ip!="":
+                        http.kill()
+
+                args = ['configurable-http-proxy', \
+                '--default-target=http://'+nip+':8888', \
+                '--ip=192.0.1.110', '--port=8888']
+                http = subprocess.Popen(args)
+                ip=nip
+        time.sleep(5) #5s检查一次
+```
+* 在宿主机上直接用
+```
+nohup configurable-http-proxy --default-target=http://192.0.1.110:8888 --ip=172.16.6.153 --port=8888
+```
+* 进行转发
+* 能看到检测到ip变化，并重新转发的过程
+![pic11](https://github.com/magicfisk/mesos_learning/raw/master/homework6/http.jpg)
